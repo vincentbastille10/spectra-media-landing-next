@@ -1,10 +1,10 @@
+// app/head.tsx
 export default function Head() {
   return (
     <>
-      <meta charSet="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      {/* Favicon for all browsers */}
-      <link rel="icon" href="/favicon.png" sizes="any" />
+      <link rel="icon" href="/icon.png?v=2" sizes="any" type="image/png" />
+      <link rel="apple-touch-icon" href="/icon.png?v=2" />
+      <meta name="theme-color" content="#ffffff" />
     </>
   );
 }
