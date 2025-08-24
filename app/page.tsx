@@ -1,12 +1,13 @@
 // app/page.tsx
 import Image from 'next/image';
 import Link from 'next/link';
+import SalesBot from '../components/SalesBot';
 
 export const metadata = {
   title:
     'Spectra Media — Automatisation IA (BettyBot, InnovationPulse, outils .dmg)',
   description:
-    "Chatbots BettyBot, veille IA prédictive InnovationPulse et outils macOS (.dmg) — déployez des automatisations rapides, fiables et mesurables.",
+    "Chatbots BettyBot, veille IA prédictive InnovationPulse et ...— déployez des automatisations rapides, fiables et mesurables.",
 };
 
 export default function HomePage() {
@@ -69,33 +70,31 @@ export default function HomePage() {
       <section id="produits" className="section container">
         <h2>Nos produits</h2>
         <p className="muted">
-          Sélectionne ce dont tu as besoin aujourd’hui, ajoute le reste quand tu
-          veux.
+          Choisissez le point d’impact le plus direct. Nous intégrons à votre stack existante.
         </p>
 
         <div className="grid">
           {/* BettyBot */}
           <article className="card">
             <div className="card-head">
-              <span className="pill">Chatbot LeadGen</span>
-              <h3>BettyBot — qualifie & route vos prospects</h3>
+              <span className="pill pill-green">Chatbot qualif</span>
+              <h3>BettyBot — capture & qualification de leads</h3>
             </div>
             <p>
-              Un agent conversationnel “utile” (pas un gadget) : qualification,
-              collecte d’email, prise de RDV, push vers CRM/Google Sheets,
-              règles métiers. Script d’intégration en 30 sec.
+              Un agent conversationnel qui qualifie, route et prend des RDV, directement sur
+              votre site ou WhatsApp. Branché Sheets/CRM, métriques claires.
             </p>
             <ul className="list">
-              <li>⚙️ Connecteurs : Email, Calendly, Google Sheets</li>
-              <li>🧭 Scénarios dirigés + compréhension libre</li>
-              <li>📈 Stats : qualif, conversions, abandons</li>
+              <li>🧭 Script de qualif personnalisable</li>
+              <li>📈 Score & routage (email/Slack/CRM)</li>
+              <li>📅 Prise de RDV (Calendly)</li>
             </ul>
             <div className="card-cta">
               <a
                 className="btn btn-primary"
                 href="https://bettybotdelph.onrender.com/"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noreferrer"
               >
                 Essayer BettyBot
               </a>
@@ -129,84 +128,34 @@ export default function HomePage() {
                 className="btn btn-primary"
                 href="https://spectramedia.gumroad.com/l/InnovationPulse"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noreferrer"
               >
-                Découvrir InnovationPulse
+                InnovationPulse sur Gumroad
               </a>
-              <Link
-                className="btn btn-ghost"
-                href="/(site)/blog/comment-nous-produisons-innovationpulse"
-              >
-                Méthode & preuves →
-              </Link>
             </div>
           </article>
 
-          {/* .dmg Trieur */}
+          {/* Trieur de factures (.dmg) */}
           <article className="card">
             <div className="card-head">
-              <span className="pill pill-green">Outils .dmg</span>
-              <h3>Trieur de factures (macOS)</h3>
+              <span className="pill pill-purple">Utilitaire macOS</span>
+              <h3>Trieur de factures — .dmg local-first</h3>
             </div>
             <p>
-              App locale (barre de menus) : récup Gmail, extraction PDF,
-              dédoublonnage, rangement et export Google Sheets. Rapide, fiable,
-              tolérant aux formats “réels”.
+              Application macOS qui récupère vos factures (Gmail), extrait les montants/TVA/dates,
+              détecte les doublons et alimente vos Google Sheets.
             </p>
             <ul className="list">
-              <li>📄 PyMuPDF, champs clés, OCR si besoin</li>
-              <li>🗂️ Détection doublons & renommage</li>
-              <li>📤 Export Google Sheets & archives</li>
+              <li>📥 Récupération Gmail + PDF</li>
+              <li>🧾 Extraction champs clés</li>
+              <li>📊 Export vers Google Sheets</li>
             </ul>
             <div className="card-cta">
-              <Link
-                className="btn btn-primary"
-                href="/(site)/blog/guide-complet-trieur-factures-macos"
-              >
-                Lire le guide complet
-              </Link>
-              <Link
-                className="btn btn-ghost"
-                href="/(site)/blog/specs-trieur-factures-macos"
-              >
+              <Link className="btn btn-ghost" href="/(site)/blog/specs-trieur-factures-macos">
                 Specs techniques →
               </Link>
             </div>
           </article>
-        </div>
-      </section>
-
-      {/* BLOC VALORISATION */}
-      <section className="section container section-alt">
-        <div className="value">
-          <div className="value-icon">📦</div>
-          <div>
-            <h3>Livrer vite, mesurer mieux</h3>
-            <p className="muted">
-              On commence petit, on met en prod, on mesure. Si la valeur est là,
-              on étend. Pas de refonte de 6 mois. Pas de dépendances exotiques.
-            </p>
-          </div>
-        </div>
-        <div className="value">
-          <div className="value-icon">🔌</div>
-          <div>
-            <h3>Connecteurs simples</h3>
-            <p className="muted">
-              Gmail, Google Sheets, Calendly, et ce dont vous avez besoin
-              vraiment.
-            </p>
-          </div>
-        </div>
-        <div className="value">
-          <div className="value-icon">🔒</div>
-          <div>
-            <h3>Data & confidentialité</h3>
-            <p className="muted">
-              Local-first quand c’est possible, cloisonnement, logs sobres,
-              opt-out.
-            </p>
-          </div>
         </div>
       </section>
 
@@ -248,10 +197,8 @@ export default function HomePage() {
           </button>
         </form>
       </section>
-import SalesBot from '@/components/SalesBot';
 
-// …dans le JSX, en bas :
-<SalesBot />
+      <SalesBot />
     </main>
   );
 }
