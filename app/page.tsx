@@ -1,9 +1,10 @@
-/* app/page.tsx */
+// app/page.tsx
 import Image from 'next/image';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Spectra Media — Automatisation IA (BettyBot, InnovationPulse, outils .dmg)',
+  title:
+    'Spectra Media — Automatisation IA (BettyBot, InnovationPulse, outils .dmg)',
   description:
     "Chatbots BettyBot, veille IA prédictive InnovationPulse et outils macOS (.dmg) — déployez des automatisations rapides, fiables et mesurables.",
 };
@@ -26,11 +27,13 @@ export default function HomePage() {
               Accélérez capture de leads & ops
               <br />
               avec <span className="grad">BettyBot</span>,{' '}
-              <span className="grad">InnovationPulse</span> & outils <span className="grad">.dmg</span>
+              <span className="grad">InnovationPulse</span> & outils{' '}
+              <span className="grad">.dmg</span>
             </h1>
             <p className="lead">
-              Des agents qui qualifient, une veille IA prédictive actionnable, et des utilitaires macOS
-              qui trient vos factures. Rapide à déployer. Mesurable. Rentable.
+              Des agents qui qualifient, une veille IA prédictive actionnable, et
+              des utilitaires macOS qui trient vos factures. Rapide à déployer.
+              Mesurable. Rentable.
             </p>
             <div className="cta-row">
               <Link className="btn btn-primary" href="#produits">
@@ -41,7 +44,6 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Social proof mini */}
             <ul className="ticks">
               <li>⏱️ Mise en place en jours, pas en mois</li>
               <li>📊 KPI clairs : taux de qualif, conversion, temps gagné</li>
@@ -50,7 +52,6 @@ export default function HomePage() {
           </div>
 
           <div className="hero-right">
-            {/* Anneau coloré (favicon) */}
             <div className="ring">
               <Image
                 src="/favicon.png"
@@ -68,7 +69,8 @@ export default function HomePage() {
       <section id="produits" className="section container">
         <h2>Nos produits</h2>
         <p className="muted">
-          Sélectionne ce dont tu as besoin aujourd’hui, ajoute le reste quand tu veux.
+          Sélectionne ce dont tu as besoin aujourd’hui, ajoute le reste quand tu
+          veux.
         </p>
 
         <div className="grid">
@@ -79,8 +81,9 @@ export default function HomePage() {
               <h3>BettyBot — qualifie & route vos prospects</h3>
             </div>
             <p>
-              Un agent conversationnel “utile” (pas un gadget) : qualification, collecte d’email,
-              prise de RDV, push vers CRM/Google Sheets, règles métiers. Script d’intégration en 30 sec.
+              Un agent conversationnel “utile” (pas un gadget) : qualification,
+              collecte d’email, prise de RDV, push vers CRM/Google Sheets,
+              règles métiers. Script d’intégration en 30 sec.
             </p>
             <ul className="list">
               <li>⚙️ Connecteurs : Email, Calendly, Google Sheets</li>
@@ -96,7 +99,10 @@ export default function HomePage() {
               >
                 Essayer BettyBot
               </a>
-              <Link className="btn btn-ghost" href="/(site)/blog/integrer-bettybot-sur-votre-site-en-10-minutes">
+              <Link
+                className="btn btn-ghost"
+                href="/(site)/blog/integrer-bettybot-sur-votre-site-en-10-minutes"
+              >
                 Guide d’intégration →
               </Link>
             </div>
@@ -109,8 +115,9 @@ export default function HomePage() {
               <h3>InnovationPulse — signaux faibles utilisables</h3>
             </div>
             <p>
-              Une veille IA qui anticipe les tendances (modèles, frameworks, usages) et propose
-              des “moves” concrets pour votre roadmap ou vos campagnes.
+              Une veille IA qui anticipe les tendances (modèles, frameworks,
+              usages) et propose des “moves” concrets pour votre roadmap ou vos
+              campagnes.
             </p>
             <ul className="list">
               <li>🔮 Détection de signaux faibles par grappes</li>
@@ -126,7 +133,10 @@ export default function HomePage() {
               >
                 Découvrir InnovationPulse
               </a>
-              <Link className="btn btn-ghost" href="/(site)/blog/comment-nous-produisons-innovationpulse">
+              <Link
+                className="btn btn-ghost"
+                href="/(site)/blog/comment-nous-produisons-innovationpulse"
+              >
                 Méthode & preuves →
               </Link>
             </div>
@@ -139,8 +149,9 @@ export default function HomePage() {
               <h3>Trieur de factures (macOS)</h3>
             </div>
             <p>
-              App locale (barre de menus) : récup Gmail, extraction PDF, dédoublonnage, rangement
-              et export Google Sheets. Rapide, fiable, tolérant aux formats “réels”.
+              App locale (barre de menus) : récup Gmail, extraction PDF,
+              dédoublonnage, rangement et export Google Sheets. Rapide, fiable,
+              tolérant aux formats “réels”.
             </p>
             <ul className="list">
               <li>📄 PyMuPDF, champs clés, OCR si besoin</li>
@@ -148,10 +159,16 @@ export default function HomePage() {
               <li>📤 Export Google Sheets & archives</li>
             </ul>
             <div className="card-cta">
-              <Link className="btn btn-primary" href="/(site)/blog/guide-complet-trieur-factures-macos">
+              <Link
+                className="btn btn-primary"
+                href="/(site)/blog/guide-complet-trieur-factures-macos"
+              >
                 Lire le guide complet
               </Link>
-              <Link className="btn btn-ghost" href="/(site)/blog/specs-trieur-factures-macos">
+              <Link
+                className="btn btn-ghost"
+                href="/(site)/blog/specs-trieur-factures-macos"
+              >
                 Specs techniques →
               </Link>
             </div>
@@ -166,8 +183,8 @@ export default function HomePage() {
           <div>
             <h3>Livrer vite, mesurer mieux</h3>
             <p className="muted">
-              On commence petit, on met en prod, on mesure. Si la valeur est là, on étend. Pas de refonte
-              de 6 mois. Pas de dépendances exotiques.
+              On commence petit, on met en prod, on mesure. Si la valeur est là,
+              on étend. Pas de refonte de 6 mois. Pas de dépendances exotiques.
             </p>
           </div>
         </div>
@@ -175,14 +192,20 @@ export default function HomePage() {
           <div className="value-icon">🔌</div>
           <div>
             <h3>Connecteurs simples</h3>
-            <p className="muted">Gmail, Google Sheets, Calendly, et ce dont vous avez besoin vraiment.</p>
+            <p className="muted">
+              Gmail, Google Sheets, Calendly, et ce dont vous avez besoin
+              vraiment.
+            </p>
           </div>
         </div>
         <div className="value">
           <div className="value-icon">🔒</div>
           <div>
             <h3>Data & confidentialité</h3>
-            <p className="muted">Local-first quand c’est possible, cloisonnement, logs sobres, opt-out.</p>
+            <p className="muted">
+              Local-first quand c’est possible, cloisonnement, logs sobres,
+              opt-out.
+            </p>
           </div>
         </div>
       </section>
@@ -190,7 +213,10 @@ export default function HomePage() {
       {/* CONTACT */}
       <section id="contact" className="section container">
         <h2>Nous contacter</h2>
-        <p className="muted">Expliquez l’objectif et on vous propose le setup le plus court vers la valeur.</p>
+        <p className="muted">
+          Expliquez l’objectif et on vous propose le setup le plus court vers la
+          valeur.
+        </p>
 
         <form
           action="https://script.google.com/macros/s/AKfycbwv68x_ZdlBoibZVJBxb5vS9Y58nAPXOpSjo37PBl5vnZo0J74dIgGJ6JqmASrXSEWbHA/exec"
@@ -209,10 +235,17 @@ export default function HomePage() {
 
           <label className="field">
             <span>Objet</span>
-            <input name="objet" type="text" required placeholder="Ex : qualif de leads pour site SaaS" />
+            <input
+              name="objet"
+              type="text"
+              required
+              placeholder="Ex : qualif de leads pour site SaaS"
+            />
           </label>
 
-          <button className="btn btn-primary" type="submit">Envoyer</button>
+          <button className="btn btn-primary" type="submit">
+            Envoyer
+          </button>
         </form>
       </section>
     </main>
