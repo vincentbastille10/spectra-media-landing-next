@@ -2,55 +2,79 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-type Msg = { id: string; role: 'bot' | 'user'; text: string };
-type Step = 0 | 1 | 2 | 3 | 'done';
+type Role = 'bot' | 'user';
+type Msg = { id: string; role: Role; text: string };
+type Step = 'idle' | 'asking_email' | 'asking_name' | 'done';
 
 const APPS_SCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbwv68x_ZdlBoibZVJBxb5vS9Y58nAPXOpSjo37PBl5vnZo0J74dIgGJ6JqmASrXSEWbHA/exec';
 
-const EXAMPLES = [
-  '🎯 **Qualification de leads B2B** sur le site (score + push Sheets/CRM).',
-  '🛍️ **SAV e-commerce** (retours, statuts, remboursements).',
-  '📅 **Prise de RDV commercial** + scoring + Calendly.',
-  '👤 **Onboarding SaaS** (activation des features & tips in-app).',
-  '📥 **Traitement factures** (PDF → extraction → dédoublonnage → Sheets).',
-  '🧑‍💼 **Concierge RH interne** (FAQ, congés, notes de frais).',
-  '📣 **Assistant marketing** (idées contenus, hooks, A/B headlines).',
-  '📲 **Bot WhatsApp** pour commandes/réservations locales.',
-  '🧲 **Capture leads en salon** via QR + conversation + export.',
-  '🧪 **Qualification candidats** (questions, planning, résumé pour RH).',
-];
+const WARM_OPENING =
+  "Salut 👋 Je suis **Spectra Assistant**. On conçoit des **agents conversationnels** (site, WhatsApp, email) qui font gagner du temps et convertissent mieux. Dis-moi **ce que tu veux automatiser** et je te propose 2–3 pistes concrètes (intégrations possibles : Sheets, Calendly, Slack, WhatsApp, Zapier).";
 
-const BENEFITS =
-  '⏱️ **gains** : 30–70% de temps sur tâches répétitives • 📈 **+15–35%** de conversion sur la capture • 🧰 **intégrations** : Site, WhatsApp, Email, Calendly, Google Sheets/Docs, Slack, Zapier/webhooks • 🔒 **data** : local-first quand possible, journaux sobres, opt-out.';
+const START_CHIPS = ['Idées de bots', 'Gains de temps', 'Intégrations possibles'];
 
-const PROCESS =
-  '🔧 **Process** : 1) Atelier 45 min pour objectifs & données • 2) POC en **3–5 jours** avec 3 KPIs • 3) Go-live • 4) Mesure & itérations.';
-
-function suggestReplies(step: Step) {
-  if (step === 0) return ['Montre des exemples', 'Quels gains ?', 'Quelles intégrations ?'];
-  if (step === 1) return ['Processus ?', 'Délai ?', 'Tarif indicatif ?'];
-  return ['Voir 10 exemples', 'Gains de temps', 'Prendre RDV'];
+function mdLite(s: string) {
+  // mini-markdown : **gras**, sauts de ligne
+  return s
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br/>');
 }
 
-function score(text: string, keys: string[]) {
-  const t = text.toLowerCase();
-  return keys.reduce((s, k) => (t.includes(k) ? s + 1 : s), 0);
+function isEmail(s: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s.trim());
 }
 
 export default function SalesBot() {
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Msg[]>([
-    { id: 'm0', role: 'bot', text: 'Salut 👋 Je suis **Spectra Assistant**. Tu veux des exemples, des gains, ou des intégrations ?' },
-  ]);
-  const [step, setStep] = useState<Step>(0);
+  const [messages, setMessages] = useState<Msg[]>([{ id: 'm0', role: 'bot', text: WARM_OPENING }]);
+  const [step, setStep] = useState<Step>('idle');
   const [email, setEmail] = useState('');
   const [nom, setNom] = useState('');
-  const [besoin, setBesoin] = useState('');
+  const [besoin, setBesoin] = useState(''); // premier vrai besoin exprimé
   const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [exchanges, setExchanges] = useState(0); // nb d’échanges utiles
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { scrollRef.current?.scrollTo({ top: 99_999, behavior: 'smooth' }); }, [messages, open]);
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 999999, behavior: 'smooth' });
+  }, [messages, open, loading]);
+
+  function push(role: Role, text: string) {
+    setMessages((m) => [...m, { id: crypto.randomUUID(), role, text }]);
+  }
+
+  async function askLLM(userText: string) {
+    setLoading(true);
+    try {
+      const history = messages.map((m) => ({
+        role: m.role === 'bot' ? 'assistant' : 'user',
+        content: m.text,
+      }));
+      history.push({ role: 'user', content: userText });
+
+      const res = await fetch('/api/bot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ history }),
+      });
+
+      if (!res.ok) throw new Error('LLM error');
+      const data = await res.json();
+      const answer: string =
+        data?.reply ||
+        "Je peux te donner des **idées concrètes** si tu précises le contexte (canal, volume, objectif).";
+      push('bot', answer);
+    } catch {
+      push(
+        'bot',
+        "Petit souci de connexion à mon moteur IA. En attendant, tu veux que je te liste **10 exemples** de bots utiles + une **estimation de gains** ?"
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function submitLead() {
     try {
@@ -58,38 +82,16 @@ export default function SalesBot() {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-        body: new URLSearchParams({ email, nom, objet: besoin, source: 'sales-bot' }).toString(),
+        body: new URLSearchParams({
+          email,
+          nom,
+          objet: besoin || 'Intérêt bots/automatisation',
+          source: 'sales-bot-llm',
+        }).toString(),
       });
-    } catch { /* no-cors: pas de réponse */ }
-  }
-
-  function reply(text: string) {
-    setMessages((m) => [...m, { id: crypto.randomUUID(), role: 'bot', text }]);
-  }
-
-  function handleKnowledge(q: string) {
-    const ql = q.toLowerCase();
-    if (score(ql, ['exemple', 'exemples', 'idée', 'ideas', 'use case']) > 0) {
-      reply('Voici **10 exemples** fréquemment demandés :\n\n' + EXAMPLES.map((e) => `• ${e}`).join('\n'));
-      return true;
+    } catch {
+      /* no-cors : pas de retour */
     }
-    if (score(ql, ['gain', 'temps', 'roi', 'conversion', 'rentab']) > 0) {
-      reply(BENEFITS);
-      return true;
-    }
-    if (score(ql, ['intégr', 'integration', 'channel', 'whatsapp', 'site', 'slack', 'sheets', 'calendly', 'zapier']) > 0) {
-      reply('📡 **Intégrations & canaux** : Site (widget), WhatsApp, Email, Slack, Google Sheets/Docs, Calendly, Zapier / webhooks, Notion, CRM via CSV/API.');
-      return true;
-    }
-    if (score(ql, ['process', 'déroulement', 'comment', 'delai', 'délai', 'jour']) > 0) {
-      reply(PROCESS);
-      return true;
-    }
-    if (score(ql, ['tarif', 'prix', 'budget', 'coût']) > 0) {
-      reply('💶 **Budget indicatif** : POC simple **1–3 k€**, bot avancé **3–8 k€** puis MCO léger. On chiffre précisément après l’atelier (45 min).');
-      return true;
-    }
-    return false;
   }
 
   async function onSend(e?: React.FormEvent) {
@@ -97,84 +99,135 @@ export default function SalesBot() {
     const value = input.trim();
     if (!value) return;
 
-    setMessages((m) => [...m, { id: crypto.randomUUID(), role: 'user', text: value }]);
+    // Affiche l’utilisateur (toujours en texte brut)
+    push('user', value);
     setInput('');
 
-    if (handleKnowledge(value)) return;
+    // Si on est en capture email
+    if (step === 'asking_email') {
+      if (isEmail(value)) {
+        setEmail(value);
+        push('bot', "Merci 🙏 Et ton **nom / entreprise** ?");
+        setStep('asking_name');
+      } else {
+        push('bot', "Je n’ai pas reconnu l’email. Tu peux me donner un format du style **prenom@domaine.com** ?");
+      }
+      return;
+    }
 
-    if (step === 0) {
-      setBesoin(value);
-      reply('Top. Ton **email** pour t’envoyer un récap ?');
-      setStep(1);
-      return;
-    }
-    if (step === 1) {
-      setEmail(value);
-      reply('Merci. Et ton **nom / entreprise** ?');
-      setStep(2);
-      return;
-    }
-    if (step === 2) {
+    // Si on est en capture nom
+    if (step === 'asking_name') {
       setNom(value);
       setStep('done');
       await submitLead();
-      reply("Parfait ✅ J’ai tout noté et envoyé dans notre pipeline. Tu peux aussi réserver ici : https://calendly.com (on cale 20 min).");
+      push(
+        'bot',
+        "Parfait ✅ J’ai noté. Je t’envoie un récap par email. Si tu veux, on cale **20 min** ici : https://calendly.com"
+      );
       return;
     }
 
-    reply("Je peux détailler **exemples**, **gains**, **intégrations** ou le **process**. Dis-moi ce que tu veux voir 👇");
+    // Conversation “valeur d’abord”
+    if (!besoin && value.length > 2 && !isEmail(value)) {
+      setBesoin(value); // capture le premier vrai besoin
+    }
+
+    await askLLM(value);
+    setExchanges((n) => n + 1);
+
+    // Après 2 échanges, proposer (doucement) de prendre l’email — sans bloquer la conversation
+    if (exchanges + 1 >= 2 && step === 'idle' && !email) {
+      push(
+        'bot',
+        "Je peux t’envoyer un **récap** + 2–3 prochaines étapes par email. Tu me donnes ton **adresse** ? (promis, zéro spam)"
+      );
+      setStep('asking_email');
+    }
   }
 
-  const chips = useMemo(() => suggestReplies(step), [step]);
+  const chips = useMemo(() => {
+    if (step === 'idle') return START_CHIPS;
+    if (step === 'asking_email') return ['Pourquoi un email ?', 'Exemples sectoriels', 'Intégrations'];
+    return ['Roadmap 2 semaines', 'Canaux (Site/WhatsApp/Email)', 'Tarif indicatif'];
+  }, [step]);
 
-  function clickChip(t: string) {
+  async function clickChip(t: string) {
     setInput(t);
-    void onSend();
+    await onSend();
   }
 
   return (
     <>
-      <button className="chat-fab" aria-label="Ouvrir le chat" onClick={() => setOpen((v) => !v)}>💬</button>
+      {/* Bouton flottant */}
+      <button
+        className="chat-fab"
+        aria-label="Ouvrir le chat"
+        onClick={() => setOpen((v) => !v)}
+        title="Parler à Spectra Assistant"
+      >
+        💬
+      </button>
 
+      {/* Fenêtre */}
       {open && (
         <div className="chat-window" role="dialog" aria-label="Spectra Assistant">
           <div className="chat-header">
             <div className="chat-title">Spectra Assistant</div>
-            <button className="chat-close" onClick={() => setOpen(false)} aria-label="Fermer">×</button>
+            <button className="chat-close" onClick={() => setOpen(false)} aria-label="Fermer">
+              ×
+            </button>
           </div>
 
           <div className="chat-body" ref={scrollRef}>
             {messages.map((m) => (
               <div key={m.id} className={`chat-msg ${m.role}`}>
-                <div className="bubble" dangerouslySetInnerHTML={{ __html: m.text }} />
+                {m.role === 'bot' ? (
+                  <div
+                    className="bubble"
+                    dangerouslySetInnerHTML={{ __html: mdLite(m.text) }}
+                  />
+                ) : (
+                  <div className="bubble" style={{ whiteSpace: 'pre-wrap' }}>
+                    {m.text}
+                  </div>
+                )}
               </div>
             ))}
+
+            {loading && (
+              <div className="chat-msg bot">
+                <div className="bubble">…</div>
+              </div>
+            )}
+
             <div className="chips">
               {chips.map((c) => (
-                <button key={c} className="chip" onClick={() => clickChip(c)}>{c}</button>
+                <button key={c} className="chip" onClick={() => void clickChip(c)}>
+                  {c}
+                </button>
               ))}
             </div>
           </div>
 
-          {step !== 'done' && (
-            <form className="chat-input" onSubmit={onSend}>
-              <input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder={
-                  step === 0 ? 'Décris ton besoin (canal, objectif)…'
-                  : step === 1 ? 'votre@email.com'
-                  : 'Prénom Nom / Entreprise'
-                }
-                inputMode={step === 1 ? 'email' : 'text'}
-                required
-              />
-              <button type="submit">Envoyer</button>
-            </form>
-          )}
+          {/* Saisie */}
+          <form className="chat-input" onSubmit={onSend}>
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder={
+                step === 'asking_email'
+                  ? 'prenom@domaine.com'
+                  : step === 'asking_name'
+                  ? 'Prénom Nom / Entreprise'
+                  : 'Pose une question ou décris ton besoin…'
+              }
+              inputMode={step === 'asking_email' ? 'email' : 'text'}
+              required
+            />
+            <button type="submit">Envoyer</button>
+          </form>
         </div>
       )}
     </>
   );
 }
-

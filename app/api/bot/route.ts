@@ -6,13 +6,14 @@ type ChatMsg = { role: 'system' | 'user' | 'assistant'; content: string };
 const SYSTEM_PROMPT: ChatMsg = {
   role: 'system',
   content:
-    "Tu es Spectra Assistant — conseiller chaleureux, subtil, et orienté valeur. " +
-    "Tu vends des agents/conversational bots personnalisés (site, WhatsApp, email) pour PME/ETI. " +
-    "Style: clair, empathique, sans jargon inutile. " +
-    "Toujours: 1) reformule brièvement le contexte, 2) propose 2–3 options concrètes (intégrations: Sheets, Calendly, Slack, WhatsApp, Zapier), " +
-    "3) suggère un next-step léger (ex: petit POC, call 20 min). " +
-    "Donne parfois des exemples sectoriels (SaaS, e-commerce, services pro, industrie). " +
-    "Ne promets jamais de miracles; propose des KPI simples (temps gagné, % conversion, délai traitement).",
+    "Tu es **Spectra Assistant**, conseiller **chaleureux, subtil et engageant**. " +
+    "Tu vends des **agents conversationnels LLM** personnalisés pour PME/ETI (site, WhatsApp, email). " +
+    "Style: clair, empathique, naturel, avec des emojis **parcimonieux**. " +
+    "À CHAQUE réponse: (1) reformule brièvement le contexte, (2) propose **2–3 pistes concrètes** " +
+    "avec intégrations (Google Sheets, Calendly, Slack, WhatsApp, Zapier/webhooks), (3) suggère un **prochain pas léger** " +
+    "(mini-POC, call 20 min), (4) chiffre à la louche 1–2 **KPI** (temps gagné, % conversion, délai). " +
+    "Évite le jargon; donne des exemples sectoriels (SaaS, e-commerce, services pro, industrie) quand utile. " +
+    "Si l’usager est sec/énervé, reste calme et **bienveillant**.",
 };
 
 function providerChoice() {
@@ -49,7 +50,7 @@ export async function POST(req: Request) {
         return new Response(JSON.stringify({ reply: `Erreur LLM: ${t}` }), { status: 500 });
       }
       const j = await r.json();
-      const reply = j?.choices?.[0]?.message?.content ?? 'Je peux détailler des options concrètes si tu précises le contexte.';
+      const reply = j?.choices?.[0]?.message?.content ?? 'Je peux proposer des options concrètes si tu précises le contexte.';
       return Response.json({ reply });
     }
 
@@ -73,15 +74,14 @@ export async function POST(req: Request) {
         return new Response(JSON.stringify({ reply: `Erreur LLM: ${t}` }), { status: 500 });
       }
       const j = await r.json();
-      const reply = j?.choices?.[0]?.message?.content ?? 'Je peux détailler des options concrètes si tu précises le contexte.';
+      const reply = j?.choices?.[0]?.message?.content ?? 'Je peux proposer des options concrètes si tu précises le contexte.';
       return Response.json({ reply });
     }
 
-    // Aucun provider configuré
     return Response.json({
       reply:
         "Note: aucun fournisseur LLM n'est configuré (TOGETHER_API_KEY / OPENAI_API_KEY). " +
-        "Je peux quand même te donner des idées et un plan en statique.",
+        "Active une clé dans Vercel → Settings → Environment Variables.",
     });
   } catch (e: any) {
     return new Response(JSON.stringify({ reply: `Erreur: ${e?.message || 'inconnue'}` }), {
