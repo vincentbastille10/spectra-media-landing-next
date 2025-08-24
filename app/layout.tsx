@@ -18,6 +18,12 @@ export const metadata: Metadata = {
     title: 'Automatisation IA — Betty Bot, InnovationPulse & .dmg',
     description: 'Chatbots Betty Bot, veille IA prédictive InnovationPulse et outils .dmg pour Mac.'
   },
+  // déclaration des icônes pour favicon et Apple Touch
+  icons: {
+    icon: '/favicon.png',
+    apple: '/favicon.png',
+    shortcut: '/favicon.png'
+  },
   alternates: { canonical: 'https://spectramedia.ai', languages: { 'fr-FR':'https://spectramedia.ai' } }
 };
 
