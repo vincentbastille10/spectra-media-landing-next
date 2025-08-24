@@ -248,6 +248,10 @@ export default function HomePage() {
           </button>
         </form>
       </section>
+import SalesBot from '@/components/SalesBot';
+
+// …dans le JSX, en bas :
+<SalesBot />
     </main>
   );
 }
