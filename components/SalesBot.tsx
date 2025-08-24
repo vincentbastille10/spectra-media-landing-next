@@ -1,4 +1,3 @@
-// components/SalesBot.tsx
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -59,9 +58,7 @@ export default function SalesBot() {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-        body: new URLSearchParams({
-          email, nom, objet: besoin, source: 'sales-bot',
-        }).toString(),
+        body: new URLSearchParams({ email, nom, objet: besoin, source: 'sales-bot' }).toString(),
       });
     } catch { /* no-cors: pas de réponse */ }
   }
@@ -72,7 +69,6 @@ export default function SalesBot() {
 
   function handleKnowledge(q: string) {
     const ql = q.toLowerCase();
-
     if (score(ql, ['exemple', 'exemples', 'idée', 'ideas', 'use case']) > 0) {
       reply('Voici **10 exemples** fréquemment demandés :\n\n' + EXAMPLES.map((e) => `• ${e}`).join('\n'));
       return true;
@@ -104,10 +100,8 @@ export default function SalesBot() {
     setMessages((m) => [...m, { id: crypto.randomUUID(), role: 'user', text: value }]);
     setInput('');
 
-    // Connaissance générale (répond toujours en priorité)
     if (handleKnowledge(value)) return;
 
-    // Flow de qualification minimal
     if (step === 0) {
       setBesoin(value);
       reply('Top. Ton **email** pour t’envoyer un récap ?');
@@ -128,7 +122,6 @@ export default function SalesBot() {
       return;
     }
 
-    // Fallback : reformuler
     reply("Je peux détailler **exemples**, **gains**, **intégrations** ou le **process**. Dis-moi ce que tu veux voir 👇");
   }
 
@@ -184,3 +177,4 @@ export default function SalesBot() {
     </>
   );
 }
+
