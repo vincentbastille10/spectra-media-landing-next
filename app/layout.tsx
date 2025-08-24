@@ -2,8 +2,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ReactNode } from "react";
-import Nav from "@/components/Nav";
-import Footer from "@/components/Footer";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://spectramedia.online"),
