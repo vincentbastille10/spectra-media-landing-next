@@ -1,50 +1,34 @@
-import type { Metadata } from 'next';
-import './globals.css';
+// app/layout.tsx
+import type { Metadata } from "next";
+import "./globals.css";
+import { ReactNode } from "react";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 
-// Meta configuration for the entire site. It declares
-// the canonical domain, SEO descriptions, Open Graph and Twitter metadata,
-// as well as favicon definitions. Update `url` fields if the domain changes.
 export const metadata: Metadata = {
-  metadataBase: new URL('https://spectramedia.online'),
-  title: 'Automatisation IA — Betty Bot, InnovationPulse & outils .dmg | Spectra Media',
+  metadataBase: new URL("https://spectramedia.online"),
+  title: "Spectra Media — Automatisation simple pour gagner des clients",
   description:
-    'Flotte Betty Bot (chatbots), InnovationPulse (veille IA prédictive) et outils macOS en .dmg (trieur de factures). Déployez des automatisations IA rapides, fiables et rentables.',
+    "Assistant de capture de contacts, idées d’actions concrètes, tri automatique de factures. Livré rapidement. Mesurable. Rentable.",
+  alternates: { canonical: "/" },
   openGraph: {
-    title: 'Automatisation IA — Betty Bot, InnovationPulse & .dmg',
+    title: "Spectra Media — Automatisation simple",
     description:
-      "Chatbots Betty Bot, veille IA prédictive InnovationPulse et outils .dmg pour Mac. Automatisations sérieuses, prêtes à l'emploi.",
-    url: 'https://spectramedia.online',
-    siteName: 'Spectra Media',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Automatisation IA — Betty Bot, InnovationPulse & .dmg',
-    description:
-      "Chatbots Betty Bot, veille IA prédictive InnovationPulse et outils .dmg pour Mac.",
-  },
-  icons: {
-    icon: '/favicon.png',
-    shortcut: '/favicon.png',
-    apple: '/favicon.png',
-  },
-  alternates: {
-    canonical: 'https://spectramedia.online',
-    languages: {
-      'fr-FR': 'https://spectramedia.online',
-    },
-  },
+      "Assistant de capture de contacts, idées d’actions concrètes, tri auto des factures.",
+    url: "https://spectramedia.online",
+    siteName: "Spectra Media",
+    type: "website"
+  }
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="fr" prefix="og: https://ogp.me/ns#">
-      <body>{children}</body>
+    <html lang="fr">
+      <body className="min-h-screen bg-white text-gray-900 antialiased">
+        <Nav />
+        <main className="mx-auto max-w-6xl px-4 md:px-6 py-10">{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }
