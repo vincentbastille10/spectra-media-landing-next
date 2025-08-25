@@ -1,34 +1,34 @@
-// app/layout.tsx
-import type { Metadata } from "next";
-import "./globals.css";
-import { ReactNode } from "react";
-import Nav from "../components/Nav";
-import Footer from "../components/Footer";
+import './globals.css'
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://spectramedia.online"),
-  title: "Spectra Media — Automatisation simple pour gagner des clients",
+  title: 'Spectra Media — Accélérez capture de leads & ops',
   description:
-    "Assistant de capture de contacts, idées d’actions concrètes, tri automatique de factures. Livré rapidement. Mesurable. Rentable.",
-  alternates: { canonical: "/" },
+    'BettyBot, InnovationPulse et utilitaires .dmg : qualif de leads, veille IA actionnable, tri de factures. Rapide à déployer. Mesurable. Rentable.',
+  robots: { index: true, follow: true },
+  alternates: { canonical: 'https://spectramedia.online/' },
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
   openGraph: {
-    title: "Spectra Media — Automatisation simple",
+    title: 'Spectra Media — Automatisation IA, sans blabla',
     description:
-      "Assistant de capture de contacts, idées d’actions concrètes, tri auto des factures.",
-    url: "https://spectramedia.online",
-    siteName: "Spectra Media",
-    type: "website"
-  }
-};
+      'Agents de qualif, veille IA actionnable, utilitaires macOS (.dmg).',
+    url: 'https://spectramedia.online/',
+    images: ['/og-image.png'],
+    siteName: 'Spectra Media',
+  },
+  other: { 'google-site-verification': 'gIEVCjrlWkcjjLzOLyzHkOMcbLtPEMaZwcOnB89oHNs' },
+}
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
-      <body className="min-h-screen bg-white text-gray-900 antialiased">
-        <Nav />
-        <main className="mx-auto max-w-6xl px-4 md:px-6 py-10">{children}</main>
-        <Footer />
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
-  );
+  )
 }
