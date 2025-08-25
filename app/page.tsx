@@ -1,129 +1,107 @@
-// app/page.tsx
-import Link from "next/link";
-import ContactForm from "../components/ContactForm";
+import Image from 'next/image'
+import Link from 'next/link'
 
-export default function Page() {
+export default function Page(){
   return (
-    <div className="space-y-20">
-      {/* Hero */}
-      <section className="text-center space-y-6">
-        <h1 className="text-3xl md:text-5xl font-bold leading-tight">
-          Automatisation simple pour <span className="underline">gagner des clients</span> — sans blabla
-        </h1>
-        <p className="text-lg md:text-xl text-gray-700">
-          Assistant de capture de contacts, idées d’actions concrètes, tri automatique des factures.
-          <br className="hidden md:block" />
-          Livré rapidement. Mesurable. Rentable.
-        </p>
-        <div className="flex items-center justify-center gap-3">
-          <Link href="#produits" className="rounded-full px-5 py-3 border border-gray-900">
-            Découvrir nos produits
-          </Link>
-          <Link href="#contact" className="rounded-full px-5 py-3 bg-gray-900 text-white">
-            Nous écrire
-          </Link>
+    <>
+      {/* HERO */}
+      <section className="section bg-hero/10">
+        <div className="wrap grid md:grid-cols-[1.2fr_.8fr] gap-10 items-center">
+          <div>
+            <span className="badge mb-4">🚀 Automatisation IA, sans blabla</span>
+            <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
+              Accélérez capture de leads & ops<br/>
+              avec <span className="text-rainbow">BettyBot, InnovationPulse</span><br/>
+              et outils <span className="text-rainbow">.dmg</span>
+            </h1>
+            <p className="mt-4 text-lg text-gray-600">
+              Des agents qui qualifient, une veille IA prédictive actionnable,
+              et des utilitaires macOS qui trient vos factures.
+              Rapide à déployer. Mesurable. Rentable.
+            </p>
+            <div className="mt-6 flex gap-3">
+              <Link href="#produits" className="btn btn-primary">Voir les produits</Link>
+              <Link href="#contact" className="btn">Nous contacter</Link>
+            </div>
+            <ul className="mt-6 text-sm text-gray-600 space-y-1">
+              <li>✅ Mise en place en jours, pas en mois</li>
+              <li>📊 KPI clairs : taux de qualif, conversion, temps gagné</li>
+              <li>🔒 Respect des données & confidentialité</li>
+            </ul>
+          </div>
+          <div className="justify-self-center">
+            <Image src="/icon.png" alt="Spectra Media" width={240} height={240} priority />
+          </div>
         </div>
-        <ul className="flex items-center justify-center gap-5 text-sm text-gray-600">
-          <li>Installation en quelques jours</li>
-          <li>Chiffres clairs (contacts, RDV, temps gagné)</li>
-          <li>Respect des données (RGPD)</li>
-        </ul>
       </section>
 
-      {/* Produits */}
-      <section id="produits" className="space-y-16">
-        <div className="grid md:grid-cols-2 gap-10 items-start">
-          <div className="space-y-3">
-            <h2 className="text-2xl md:text-3xl font-semibold">BettyBot — capter & qualifier des contacts</h2>
-            <p className="text-gray-700">
-              Un petit assistant sur votre site/WhatsApp : il pose les <b>bonnes questions</b>, prend des <b>RDV</b> (Calendly)
-              et envoie chaque demande à la <b>bonne personne</b> (email/Slack/CRM).
+      {/* PRODUITS */}
+      <section id="produits" className="section">
+        <div className="wrap grid md:grid-cols-3 gap-6">
+          <div className="card">
+            <span className="badge mb-3">CHATBOT QUALIF</span>
+            <h3 className="text-2xl font-semibold">BettyBot — capture & qualification de leads</h3>
+            <p className="mt-2 text-gray-700">
+              Un agent conversationnel qui qualifie, route et prend des RDV (Calendly),
+              sur votre site ou WhatsApp. Branché Sheets/CRM, métriques claires.
             </p>
-            <ul className="list-disc pl-6 text-gray-700">
-              <li>Questions personnalisées • Envoi automatique • RDV en un clic</li>
-              <li>Compatible avec vos outils existants</li>
+            <ul className="list-disc ml-5 mt-3 text-sm text-gray-600 space-y-1">
+              <li>Script de qualif personnalisable</li>
+              <li>Score & routage (email/Slack/CRM)</li>
+              <li>Prise de RDV</li>
             </ul>
-            <div className="flex gap-3">
-              <Link href="/blog/integrer-bettybot-en-10-minutes" className="underline">Voir le guide</Link>
-              <Link href="#contact" className="underline">Demander une démo</Link>
+            <div className="mt-4 flex gap-3">
+              <Link className="btn btn-primary" href="/blog/integrer-bettybot-sur-votre-site-en-10-minutes">Essayer BettyBot</Link>
+              <Link className="btn" href="/blog/automatiser-qualification-leads-chatbot">Guide d’intégration →</Link>
             </div>
           </div>
-          <div className="rounded-2xl border p-6">
-            <p className="font-medium mb-2">Résultat visible</p>
-            <p className="text-gray-700">Un tableau simple : <b>contacts qualifiés</b>, <b>RDV pris</b>, <b>temps gagné</b>.</p>
-          </div>
-        </div>
 
-        <div className="grid md:grid-cols-2 gap-10 items-start">
-          <div className="space-y-3">
-            <h2 className="text-2xl md:text-3xl font-semibold">InnovationPulse — votre veille IA utile</h2>
-            <p className="text-gray-700">
-              Chaque jour, nous lisons pour vous et envoyons <b>l’essentiel</b> : 5 infos concrètes + <b>idées d’actions</b> pour vos offres,
-              contenus ou roadmap. Pas de bruit, que du pratico-pratique.
+          <div className="card">
+            <span className="badge mb-3">VEILLE IA PRÉDICTIVE</span>
+            <h3 className="text-2xl font-semibold">InnovationPulse — signaux faibles utilisables</h3>
+            <p className="mt-2 text-gray-700">
+              Tendance → idées testables (MVP, hooks, contenus) → moves concrets pour votre roadmap.
             </p>
-            <ul className="list-disc pl-6 text-gray-700">
-              <li>Infos triées • Idées prêtes à tester • Alertes hebdo</li>
+            <ul className="list-disc ml-5 mt-3 text-sm text-gray-600 space-y-1">
+              <li>Détection par grappes</li>
+              <li>Idées prêtes à tester</li>
+              <li>Remontées hebdo + alertes</li>
             </ul>
-            <div className="flex gap-3">
-              <Link href="https://spectramedia.gumroad.com/l/haubanai" className="underline">Voir l’offre</Link>
-            </div>
+            <Link className="btn btn-primary mt-4" href="/blog/comment-nous-produisons-innovationpulse">
+              InnovationPulse sur Gumroad
+            </Link>
           </div>
-          <div className="rounded-2xl border p-6">
-            <p className="font-medium mb-2">Concret, mesurable</p>
-            <p className="text-gray-700">Des pistes d’actions reliées à vos objectifs. Focus <b>résultats</b>, pas jargon.</p>
-          </div>
-        </div>
 
-        <div className="grid md:grid-cols-2 gap-10 items-start">
-          <div className="space-y-3">
-            <h2 className="text-2xl md:text-3xl font-semibold">Trieur de factures (Mac)</h2>
-            <p className="text-gray-700">
-              Une application Mac qui récupère vos <b>factures Gmail</b>, lit montants/TVA/dates et <b>remplit</b> votre Google Sheet.
-              Installation simple (double-clic), détection des doublons incluse.
+          <div className="card">
+            <span className="badge mb-3">UTILITAIRE MACOS</span>
+            <h3 className="text-2xl font-semibold">Trieur de factures — .dmg local-first</h3>
+            <p className="mt-2 text-gray-700">
+              Récupère Gmail + PDF, extrait TTC/TVA/dates, dédoublonne et remplit Google Sheets.
             </p>
-            <ul className="list-disc pl-6 text-gray-700">
-              <li>Installation simple • Données sur votre compte • Google Sheet à jour</li>
+            <ul className="list-disc ml-5 mt-3 text-sm text-gray-600 space-y-1">
+              <li>Récupération Gmail + PDF</li>
+              <li>Extraction champs clés</li>
+              <li>Export vers Google Sheets</li>
             </ul>
-            <div className="flex gap-3">
-              <Link href="/blog/specs-trieur-factures-macos" className="underline">Specs simples</Link>
-            </div>
-          </div>
-          <div className="rounded-2xl border p-6">
-            <p className="font-medium mb-2">Prêt pour la compta</p>
-            <p className="text-gray-700">Export direct vers Google Sheets. Moins d’oubli, plus de temps gagné.</p>
+            <Link className="btn mt-4" href="/blog/specs-trieur-factures-macos">Specs techniques →</Link>
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-semibold">FAQ express</h2>
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-3">
-            <h3 className="font-medium">Combien de temps pour démarrer ?</h3>
-            <p className="text-gray-700">Le plus souvent <b>quelques jours</b>.</p>
-          </div>
-          <div className="space-y-3">
-            <h3 className="font-medium">Dois-je changer mes outils ?</h3>
-            <p className="text-gray-700">Non. On <b>branche</b> ce que vous avez déjà (site, email, agenda, CRM).</p>
-          </div>
-          <div className="space-y-3">
-            <h3 className="font-medium">Comment je vois les résultats ?</h3>
-            <p className="text-gray-700">Un tableau clair : <b>contacts qualifiés</b>, <b>RDV</b>, <b>temps gagné</b>.</p>
-          </div>
-          <div className="space-y-3">
-            <h3 className="font-medium">Et mes données ?</h3>
-            <p className="text-gray-700">Nous respectons le RGPD. <b>Rien n’est partagé</b> sans votre accord.</p>
-          </div>
+      {/* CONTACT */}
+      <section id="contact" className="section">
+        <div className="wrap">
+          <h2 className="text-3xl font-bold mb-4">Nous contacter</h2>
+          <p className="text-gray-600 mb-6">Expliquez l’objectif et on vous propose le setup le plus court vers la valeur.</p>
+          <form className="card grid md:grid-cols-3 gap-3" action="https://formspree.io/f/mayzkxxx" method="POST">
+            <input name="email" type="email" placeholder="Email" className="border rounded-xl p-3 md:col-span-1" required />
+            <input name="name" placeholder="Nom" className="border rounded-xl p-3 md:col-span-1" />
+            <input name="subject" placeholder="Objet" className="border rounded-xl p-3 md:col-span-1" />
+            <textarea name="message" placeholder="Message" rows={4} className="border rounded-xl p-3 md:col-span-3" />
+            <button className="btn btn-primary w-fit">Envoyer</button>
+          </form>
         </div>
       </section>
-
-      {/* Contact */}
-      <section id="contact" className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-semibold">Parlez-nous de votre besoin</h2>
-        <p className="text-gray-700">Dites-nous le résultat que vous voulez obtenir, on propose <b>le chemin le plus court</b>.</p>
-        <ContactForm />
-      </section>
-    </div>
-  );
+    </>
+  )
 }
