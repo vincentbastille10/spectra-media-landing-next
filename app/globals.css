@@ -1,8 +1,9 @@
+cat > app/globals.css <<'CSS'
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Layout utils */
+/* Utilitaires */
 .section { @apply py-14 md:py-20; }
 .wrap { @apply max-w-6xl mx-auto px-4; }
 .card { @apply bg-white shadow-lg rounded-2xl p-6; }
@@ -10,9 +11,14 @@
 .btn-primary { @apply bg-black text-white border-transparent; }
 .badge { @apply inline-block text-xs px-2.5 py-1 rounded-full bg-black text-white; }
 
-/* HERO dégradé + texte arc-en-ciel */
-.bg-hero{ background: linear-gradient(135deg,#5b8cff 0%,#a855f7 50%,#ff6b6b 100%); }
+/* HERO avec très léger dégradé crème comme sur ta capture */
+.hero-bg {
+  background: radial-gradient(1200px 400px at 80% 20%, #fdecc9 0%, rgba(253,236,201,0) 60%) no-repeat;
+}
+
+/* Titres arc-en-ciel */
 .text-rainbow{
   background: linear-gradient(90deg,#2563eb,#22c55e,#f59e0b,#ef4444);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
+CSS
