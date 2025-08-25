@@ -1,22 +1,38 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Base */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;color:#0b0b0b;background:#fff}
 
-/* Utilitaires */
-.section { @apply py-14 md:py-20; }
-.wrap { @apply max-w-6xl mx-auto px-4; }
-.card { @apply bg-white shadow-lg rounded-2xl p-6; }
-.btn { @apply inline-flex items-center gap-2 px-5 py-3 rounded-xl font-medium border border-black/10 hover:scale-[1.01] transition; }
-.btn-primary { @apply bg-black text-white border-transparent; }
-.badge { @apply inline-block text-xs px-2.5 py-1 rounded-full bg-black text-white; }
+/* Layout utilitaires */
+.section{padding:56px 0}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+h1{font-weight:800;line-height:1.1;font-size:clamp(32px,5.2vw,56px);margin:0}
+h2{font-weight:700;line-height:1.2;font-size:clamp(24px,3vw,32px);margin:0 0 12px}
+h3{font-weight:700;font-size:22px;margin:0 0 8px}
+p{margin:12px 0}
+a{color:#2563eb;text-decoration:none}
+a:hover{text-decoration:underline}
 
-/* Fond discret du HERO (comme ta capture) */
-.hero-bg {
-  background: radial-gradient(1200px 400px at 80% 20%, #fdecc9 0%, rgba(253,236,201,0) 60%) no-repeat;
-}
+/* Boutons, cartes, badges */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border:1px solid rgba(0,0,0,.1);border-radius:14px;font-weight:600;transition:transform .15s ease}
+.btn:hover{transform:scale(1.01)}
+.btn-primary{background:#0b0b0b;color:#fff;border-color:transparent}
+.card{background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.06);padding:24px}
+.badge{display:inline-block;background:#000;color:#fff;border-radius:999px;padding:6px 10px;font-size:12px}
+
+/* HERO (fond crème en haut à droite) */
+.hero{padding:56px 0;background:radial-gradient(1200px 400px at 80% 20%, #fdecc9 0%, rgba(253,236,201,0) 60%) no-repeat}
+.hero .wrap{display:grid;gap:40px;align-items:center}
+@media(min-width:768px){.hero .wrap{grid-template-columns:1.2fr .8fr}}
 
 /* Titres arc-en-ciel */
 .text-rainbow{
-  background: linear-gradient(90deg,#2563eb,#22c55e,#f59e0b,#ef4444);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
+  background:linear-gradient(90deg,#2563eb,#22c55e,#f59e0b,#ef4444);
+  -webkit-background-clip:text;background-clip:text;color:transparent
 }
+
+/* Produits : grille 3 colonnes */
+.products{display:grid;gap:24px}
+@media(min-width:900px){.products{grid-template-columns:repeat(3,1fr)}}
+
+/* Formulai*
