@@ -1,7 +1,16 @@
 {
   "compilerOptions": {
+<<<<<<< HEAD
     "target": "ES2022",
     "lib": ["dom", "dom.iterable", "esnext"],
+=======
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+>>>>>>> 180ca23 (Cleanup: remove nested app + add static robots/sitemap + .gitignore)
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -12,8 +21,27 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+<<<<<<< HEAD
     "baseUrl": ".",
     "paths": { "@/*": ["./*"] }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"]
+=======
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+>>>>>>> 180ca23 (Cleanup: remove nested app + add static robots/sitemap + .gitignore)
 }
