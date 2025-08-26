@@ -4,57 +4,35 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
-/* ---------------------------------------------
-   Styles de base réutilisés
----------------------------------------------- */
-const inputBase: React.CSSProperties = {
-  width: '100%',
-  border: '1px solid #e5e7eb',
-  borderRadius: 12,
-  padding: '12px 14px',
-  font: 'inherit',
-  outline: 'none',
-}
-
-/* ---------------------------------------------
-   Remplit les champs cachés (URL & userAgent)
----------------------------------------------- */
-function FormMeta() {
-  useEffect(() => {
-    const p = document.getElementById('pathField') as HTMLInputElement | null
-    const ua = document.getElementById('uaField') as HTMLInputElement | null
-    if (p) p.value = location.href
-    if (ua) ua.value = navigator.userAgent
-  }, [])
-  return null
-}
-
-/* ---------------------------------------------
-   Bulle de chat : Assistant IA — Spectra Media
-   (appelle /api/bot qui parle à OpenAI)
----------------------------------------------- */
 type Msg = { role: 'user' | 'assistant'; content: string }
 
-function BettyBotBubble() {
-  const [open, setOpen] = useState(false)
-  const [sending, setSending] = useState(false)
-  const [input, setInput] = useState('')
-  const initialGreeting =
-    "Bonjour 👋 Je suis l’Assistant IA de Spectra Media. Dites-moi votre contexte et je vous montrerai comment nos automatisations (chatbot de qualification + RDV, signaux faibles InnovationPulse, tri de factures → Google Sheets) vous font gagner du temps et mieux convertir. Que souhaitez-vous améliorer en priorité ?"
+const APPSCRIPT_URL =
+  'https://script.google.com/macros/s/AKfycbynkOfaP-YwcpOtFE-Cjllhfpcde6_7_xFACht31SEW7RpZytSFWgxIyM2CH9YpIlGzwA/exec'
+
+export default function HomePage() {
+  // -------------------
+  // Chat assistant
+  // -------------------
   const [msgs, setMsgs] = useState<Msg[]>([
-    { role: 'assistant', content: initialGreeting },
+    {
+      role: 'assistant',
+      content:
+        "Bonjour 👋 Je suis l’Assistant IA de Spectra Media. Dites-moi votre contexte et je vous montre comment nos automatisations (chatbot de qualif + RDV, InnovationPulse, tri de factures…) vont vous faire gagner du temps et mieux convertir. Qu’est-ce qu’on améliore en priorité ?",
+    },
   ])
+  const [input, setInput] = useState('')
+  const [sending, setSending] = useState(false)
   const listRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    listRef.current?.scrollTo({ top: 1e9 })
-  }, [msgs, open])
+    listRef.current?.lastElementChild?.scrollIntoView({ behavior: 'smooth' })
+  }, [msgs.length])
 
   async function send() {
     const text = input.trim()
     if (!text || sending) return
     setInput('')
-    const next = [...msgs, { role: 'user', content: text }]
+    const next = [...msgs, { role: 'user' as const, content: text }]
     setMsgs(next)
     setSending(true)
     try {
@@ -63,388 +41,216 @@ function BettyBotBubble() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: next }),
       })
-      const data = await r.json()
-      const reply =
-        (data && data.reply) ||
-        "Oups, je n’ai pas pu répondre. Pouvez-vous reformuler ?"
+      const data = await r.json().catch(() => ({}))
+      const reply = (data?.reply as string) || "Merci, j'ai noté."
       setMsgs((m) => [...m, { role: 'assistant', content: reply }])
     } catch {
       setMsgs((m) => [
         ...m,
-        { role: 'assistant', content: 'Erreur réseau. Réessayez plus tard.' },
+        { role: 'assistant', content: 'Petit souci réseau, pouvez-vous réessayer ?' },
       ])
     } finally {
       setSending(false)
     }
   }
 
-  const btn: React.CSSProperties = {
-    position: 'fixed',
-    right: 16,
-    bottom: 16,
-    width: 56,
-    height: 56,
-    borderRadius: 999,
-    display: 'grid',
-    placeItems: 'center',
-    background: '#0b0b0b',
-    color: '#fff',
-    fontSize: 22,
-    boxShadow: '0 8px 20px rgba(0,0,0,.25)',
-    cursor: 'pointer',
-    zIndex: 61,
-  }
-  const panel: React.CSSProperties = {
-    position: 'fixed',
-    right: 16,
-    bottom: 90,
-    width: 'min(380px, 92vw)',
-    height: 'min(560px, 75vh)',
-    borderRadius: 16,
-    overflow: 'hidden',
-    boxShadow: '0 20px 60px rgba(0,0,0,.22)',
-    background: '#fff',
-    zIndex: 60,
-    display: 'flex',
-    flexDirection: 'column',
-  }
-  const header: React.CSSProperties = {
-    height: 44,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: '0 12px',
-    borderBottom: '1px solid #eee',
-    background: '#fafafa',
-  }
-  const list: React.CSSProperties = {
-    flex: 1,
-    padding: 12,
-    overflowY: 'auto',
-  }
-  const bubbleUser: React.CSSProperties = {
-    background: '#eef2ff',
-    padding: '10px 12px',
-    borderRadius: 12,
-    margin: '6px 0 6px auto',
-    maxWidth: '85%',
-    whiteSpace: 'pre-wrap',
-    wordBreak: 'break-word',
-  }
-  const bubbleBot: React.CSSProperties = {
-    background: '#f8fafc',
-    padding: '10px 12px',
-    borderRadius: 12,
-    margin: '6px auto 6px 0',
-    maxWidth: '85%',
-    border: '1px solid #eef2f7',
-    whiteSpace: 'pre-wrap',
-    wordBreak: 'break-word',
-  }
-  const form: React.CSSProperties = {
-    display: 'flex',
-    gap: 8,
-    padding: 10,
-    borderTop: '1px solid #eee',
-    background: '#fafafa',
-  }
-  const inputStyle: React.CSSProperties = {
-    flex: 1,
-    padding: '10px 12px',
-    border: '1px solid #e5e7eb',
-    borderRadius: 12,
-    font: 'inherit',
-  }
-  const sendBtn: React.CSSProperties = {
-    padding: '10px 14px',
-    borderRadius: 12,
-    border: '1px solid rgba(0,0,0,.1)',
-    background: '#0b0b0b',
-    color: '#fff',
-    cursor: 'pointer',
+  // -------------------
+  // Formulaire → Google Sheets (Apps Script)
+  // -------------------
+  const [form, setForm] = useState({ email: '', nom: '', objet: '', tel: '' })
+  const [sent, setSent] = useState<string | null>(null)
+
+  async function submitLead(e: React.FormEvent) {
+    e.preventDefault()
+    setSent(null)
+
+    const fd = new FormData()
+    // Noms de colonnes présents dans ta Sheet : email, nom, objet de la demande (+ tel optionnel)
+    fd.append('email', form.email)
+    fd.append('nom', form.nom)
+    fd.append('objet', form.objet)
+    fd.append('tel', form.tel)
+
+    try {
+      // La plupart des Apps Script acceptent ce POST simple (no-cors + FormData) quand le déploiement est public
+      await fetch(APPSCRIPT_URL, { method: 'POST', body: fd, mode: 'no-cors' as RequestMode })
+      setSent('Merci ! Nous revenons vite vers vous.')
+      setForm({ email: '', nom: '', objet: '', tel: '' })
+    } catch {
+      setSent("Oups, envoi impossible. Écrivez-nous à contact@spectramedia.online.")
+    }
   }
 
   return (
-    <>
-      {open && (
-        <div style={panel} role="dialog" aria-label="Assistant IA — Spectra Media">
-          <div style={header}>
-            <strong>Assistant IA — Spectra Media</strong>
-            <button
-              onClick={() => setOpen(false)}
-              aria-label="Fermer"
-              style={{ border: 0, background: 'transparent', fontSize: 22, cursor: 'pointer' }}
-            >
-              ×
-            </button>
-          </div>
-          <div ref={listRef} style={list}>
-            {msgs.map((m, i) => (
-              <div key={i} style={m.role === 'user' ? bubbleUser : bubbleBot}>
-                {m.content}
-              </div>
-            ))}
-          </div>
-          <div style={form}>
-            <input
-              style={inputStyle}
-              placeholder="Écrivez votre message…"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') send()
-              }}
-            />
-            <button onClick={send} disabled={sending} style={sendBtn}>
-              {sending ? '…' : 'Envoyer'}
-            </button>
-          </div>
-        </div>
-      )}
-      <button
-        onClick={() => setOpen((v) => !v)}
-        style={btn}
-        aria-label={open ? 'Fermer le chat' : 'Ouvrir le chat'}
-        title="Parler à l’Assistant IA"
-      >
-        💬
-      </button>
-    </>
-  )
-}
-
-/* ---------------------------------------------
-   Page
----------------------------------------------- */
-export default function Page() {
-  return (
-    <>
+    <main>
       {/* HERO */}
-      <section
-        className="section"
-        style={{
-          padding: '64px 0 32px',
-          background:
-            'linear-gradient(135deg, rgba(91,140,255,.15) 0%, rgba(168,85,247,.12) 50%, rgba(255,107,107,.10) 100%)',
-        }}
-      >
-        <div
-          className="wrap"
-          style={{
-            maxWidth: 1120,
-            margin: '0 auto',
-            padding: '0 16px',
-            display: 'grid',
-            gridTemplateColumns: '1.2fr .8fr',
-            gap: 24,
-            alignItems: 'center',
-          }}
-        >
+      <section className="section">
+        <div className="wrap" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
           <div>
-            <span
-              className="badge"
-              style={{
-                display: 'inline-block',
-                fontSize: 12,
-                background: '#0b0b0b',
-                color: '#fff',
-                padding: '6px 10px',
-                borderRadius: 999,
-              }}
-            >
-              🚀 Automatisation IA, sans blabla
-            </span>
-
-            <h1 style={{ marginTop: 16, lineHeight: 1.15 }}>
+            <div style={{ fontSize: 14, marginBottom: 8 }}>🚀 Automatisation IA, sans blabla</div>
+            <h1 style={{ fontSize: 42, lineHeight: 1.1, margin: '8px 0 12px' }}>
               Accélérez capture de leads & ops
               <br />
-              avec{' '}
-              <span
-                style={{
-                  background:
-                    'linear-gradient(90deg,#2563eb,#22c55e,#f59e0b,#ef4444)',
-                  WebkitBackgroundClip: 'text',
-                  backgroundClip: 'text',
-                  color: 'transparent',
-                }}
-              >
-                BettyBot, InnovationPulse
-              </span>
+              avec <strong>BettyBot</strong>, <strong>InnovationPulse</strong>
               <br />
-              et outils{' '}
-              <span
-                style={{
-                  background:
-                    'linear-gradient(90deg,#2563eb,#22c55e,#f59e0b,#ef4444)',
-                  WebkitBackgroundClip: 'text',
-                  backgroundClip: 'text',
-                  color: 'transparent',
-                }}
-              >
-                .dmg
-              </span>
+              & utilitaires <strong>.dmg</strong>
             </h1>
-
-            <p style={{ marginTop: 16, fontSize: 18, color: '#555' }}>
-              Des agents qui qualifient, une veille IA prédictive actionnable, et des utilitaires macOS qui trient vos
-              factures. Rapide à déployer. Mesurable. Rentable.
+            <p style={{ maxWidth: 560, marginBottom: 16 }}>
+              Des agents qui qualifient, une veille IA prédictive actionnable, et des utilitaires
+              macOS qui trient vos factures. Rapide à déployer. Mesurable. Rentable.
             </p>
-
-            <div style={{ marginTop: 16, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <a className="btn btn-primary" href="#produits">Voir les produits</a>
-              <a className="btn" href="#contact">Nous contacter</a>
-              <a className="btn" href="https://bettybotdelph.onrender.com/" target="_blank" rel="noopener noreferrer">
-                Lancer BettyBot ↗
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <a
+                href="https://spectramedia.gumroad.com/l/InnovationPulse"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary"
+              >
+                InnovationPulse
               </a>
+              <a
+                href="https://bettybotdelph.onrender.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn"
+              >
+                Essayer BettyBot
+              </a>
+              <Link href="#contact" className="btn">
+                Nous contacter
+              </Link>
             </div>
-
-            <ul style={{ marginTop: 16, color: '#555', fontSize: 14, lineHeight: 1.7 }}>
+            <ul style={{ marginTop: 12 }}>
               <li>✅ Mise en place en jours, pas en mois</li>
               <li>📊 KPI clairs : taux de qualif, conversion, temps gagné</li>
               <li>🔒 Respect des données & confidentialité</li>
             </ul>
           </div>
 
-          <div style={{ justifySelf: 'center' }}>
-            <Image src="/icon.png" alt="Spectra Media" width={260} height={260} priority />
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Image
+              src="/icon.png"
+              alt="Spectra Media"
+              width={224}
+              height={224}
+              priority
+              className="hero-logo"
+            />
           </div>
         </div>
       </section>
 
-      {/* PRODUITS */}
-      <section id="produits" className="section" style={{ padding: '56px 0' }}>
-        <div className="wrap" style={{ maxWidth: 1120, margin: '0 auto', padding: '0 16px' }}>
-          <h2>Nos produits</h2>
-          <p style={{ color: '#666', marginTop: 8, marginBottom: 16 }}>
-            Choisissez le point d’impact le plus direct. Nous intégrons à votre stack existante.
-          </p>
-
+      {/* BOT */}
+      <section className="section" id="assistant">
+        <div className="wrap">
+          <h2 style={{ marginBottom: 12 }}>Assistant IA — Spectra Media</h2>
           <div
-            className="grid"
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: 16,
+              border: '1px solid #eee',
+              borderRadius: 12,
+              padding: 12,
+              maxWidth: 680,
             }}
           >
-            {/* BettyBot */}
-            <div className="card" style={{ background: '#fff', borderRadius: 16, padding: 16, boxShadow: '0 10px 24px rgba(0,0,0,.06)' }}>
-              <span className="badge" style={{ display: 'inline-block', fontSize: 12, padding: '6px 10px', borderRadius: 999, background: '#0b0b0b', color: '#fff', marginBottom: 12 }}>
-                CHATBOT QUALIF
-              </span>
-              <h3>BettyBot — capture & qualification de leads</h3>
-              <p style={{ color: '#444' }}>
-                Agent conversationnel qui qualifie, route et prend des RDV (Calendly). Site ou WhatsApp. Branché Sheets/CRM.
-              </p>
-              <ul style={{ marginTop: 8, color: '#555', fontSize: 14, lineHeight: 1.7 }}>
-                <li>Script de qualif personnalisable</li>
-                <li>Score & routage (email/Slack/CRM)</li>
-                <li>Prise de RDV</li>
-              </ul>
-              <div style={{ marginTop: 12, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                <a className="btn btn-primary" href="https://bettybotdelph.onrender.com/" target="_blank" rel="noopener noreferrer">Essayer BettyBot ↗</a>
-                <Link className="btn" href="/blog/automatiser-qualification-leads-chatbot">Guide d’intégration →</Link>
-              </div>
+            <div
+              ref={listRef}
+              style={{
+                maxHeight: 300,
+                overflowY: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 8,
+                paddingBottom: 8,
+              }}
+            >
+              {msgs.map((m, i) => (
+                <div
+                  key={i}
+                  style={{
+                    alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start',
+                    background: m.role === 'user' ? '#111' : '#f3f4f6',
+                    color: m.role === 'user' ? '#fff' : '#111',
+                    padding: '8px 12px',
+                    borderRadius: 10,
+                    maxWidth: '80%',
+                    whiteSpace: 'pre-wrap',
+                  }}
+                >
+                  {m.content}
+                </div>
+              ))}
             </div>
-
-            {/* InnovationPulse */}
-            <div className="card" style={{ background: '#fff', borderRadius: 16, padding: 16, boxShadow: '0 10px 24px rgba(0,0,0,.06)' }}>
-              <span className="badge" style={{ display: 'inline-block', fontSize: 12, padding: '6px 10px', borderRadius: 999, background: '#0b0b0b', color: '#fff', marginBottom: 12 }}>
-                VEILLE IA PRÉDICTIVE
-              </span>
-              <h3>InnovationPulse — signaux faibles utilisables</h3>
-              <p style={{ color: '#444' }}>
-                Détecte tendances par grappes → idées testables (MVP, hooks, contenus) → moves concrets.
-              </p>
-              <ul style={{ marginTop: 8, color: '#555', fontSize: 14, lineHeight: 1.7 }}>
-                <li>Détection par grappes</li>
-                <li>Idées prêtes à tester</li>
-                <li>Remontées hebdo + alertes</li>
-              </ul>
-              <a className="btn btn-primary" style={{ marginTop: 12 }} href="https://spectramedia.gumroad.com/l/InnovationPulse" target="_blank" rel="noopener noreferrer">
-                InnovationPulse sur Gumroad ↗
-              </a>
-            </div>
-
-            {/* Trieur de factures */}
-            <div className="card" style={{ background: '#fff', borderRadius: 16, padding: 16, boxShadow: '0 10px 24px rgba(0,0,0,.06)' }}>
-              <span className="badge" style={{ display: 'inline-block', fontSize: 12, padding: '6px 10px', borderRadius: 999, background: '#0b0b0b', color: '#fff', marginBottom: 12 }}>
-                UTILITAIRE MACOS
-              </span>
-              <h3>Trieur de factures — .dmg local-first</h3>
-              <p style={{ color: '#444' }}>
-                Récupère Gmail + PDF, extrait TTC/TVA/dates, dédoublonne et remplit Google Sheets.
-              </p>
-              <ul style={{ marginTop: 8, color: '#555', fontSize: 14, lineHeight: 1.7 }}>
-                <li>Récupération Gmail + PDF</li>
-                <li>Extraction champs clés</li>
-                <li>
-                  Export vers Google Sheets —{' '}
-                  <a
-                    href="https://docs.google.com/spreadsheets/d/14dTsi1N09Li7kzqXPFILeoEYMtIsKiVZHdpZikY9DbA/edit?gid=0#gid=0"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    voir modèle ↗
-                  </a>
-                </li>
-              </ul>
-              <Link className="btn" style={{ marginTop: 12 }} href="/blog/specs-trieur-factures-macos">
-                Specs techniques →
-              </Link>
+            <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && send()}
+                placeholder="Posez votre question…"
+                style={{ flex: 1, padding: '10px 12px', borderRadius: 8, border: '1px solid #ddd' }}
+              />
+              <button className="btn btn-primary" disabled={sending} onClick={send}>
+                {sending ? '…' : 'Envoyer'}
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CONTACT — envoi direct vers Google Sheets (Apps Script) */}
-      <section id="contact" className="section" style={{ padding: '56px 0' }}>
-        <div className="wrap" style={{ maxWidth: 820, margin: '0 auto', padding: '0 16px' }}>
+      {/* CONTACT */}
+      <section className="section" id="contact">
+        <div className="wrap" style={{ maxWidth: 680 }}>
           <h2>Nous contacter</h2>
-          <p style={{ color: '#666', margin: '8px 0 16px' }}>
-            Expliquez l’objectif et on vous propose le setup le plus court vers la valeur.
-          </p>
+          <p>Expliquez l’objectif et on vous propose le setup le plus court vers la valeur.</p>
 
-          <form
-            className="card form"
-            action="https://script.google.com/macros/s/AKfycbynkOfaP-YwcpOtFE-Cjllhfpcde6_7_xFACht31SEW7RpZytSFWgxIyM2CH9YpIlGzwA/exec"
-            method="POST"
-            style={{
-              background: '#fff',
-              borderRadius: 16,
-              padding: 16,
-              boxShadow: '0 10px 24px rgba(0,0,0,.06)',
-              display: 'grid',
-              gap: 10,
-            }}
-          >
-            <input name="email" type="email" placeholder="Email" style={inputBase} required />
-            <input name="phone" type="tel" placeholder="Téléphone (requis)" style={inputBase} required />
-            <input name="nom" placeholder="Nom / Entreprise" style={inputBase} />
-            {/* La feuille a "objet de la demande" → on poste avec ce nom exact */}
-            <input name="objet de la demande" placeholder="Objet" style={inputBase} />
-            <textarea name="message" placeholder="Message" style={{ ...inputBase, minHeight: 120 }} />
-
-            <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 14, color: '#333' }}>
-              <input type="checkbox" name="ok_to_call" defaultChecked /> OK pour un contact téléphonique
+          <form onSubmit={submitLead} style={{ display: 'grid', gap: 10 }}>
+            <label>
+              Email
+              <input
+                required
+                type="email"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #ddd' }}
+              />
             </label>
 
-            {/* Meta + redirect */}
-            <input type="hidden" id="pathField" name="path" value="" />
-            <input type="hidden" id="uaField" name="ua" value="" />
-            <input type="hidden" name="redirect" value="https://spectramedia.online/merci" />
+            <label>
+              Nom
+              <input
+                required
+                value={form.nom}
+                onChange={(e) => setForm({ ...form, nom: e.target.value })}
+                style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #ddd' }}
+              />
+            </label>
 
-            <button className="btn btn-primary" style={{ width: 'fit-content', marginTop: 8 }}>
+            <label>
+              Téléphone (optionnel)
+              <input
+                value={form.tel}
+                onChange={(e) => setForm({ ...form, tel: e.target.value })}
+                style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #ddd' }}
+              />
+            </label>
+
+            <label>
+              Objet de la demande
+              <input
+                required
+                value={form.objet}
+                onChange={(e) => setForm({ ...form, objet: e.target.value })}
+                placeholder="Ex : qualif de leads pour site SaaS"
+                style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #ddd' }}
+              />
+            </label>
+
+            <button className="btn btn-primary" type="submit">
               Envoyer
             </button>
+            {sent && <div style={{ marginTop: 6 }}>{sent}</div>}
           </form>
-
-          <FormMeta />
         </div>
       </section>
-
-      {/* Bulle de chat (toujours visible) */}
-      <BettyBotBubble />
-    </>
+    </main>
   )
 }
