@@ -1,5 +1,5 @@
 // app/api/bot/route.ts
-export const runtime = 'edge' // fonctionne sans SDK sur Vercel Edge
+export const runtime = 'edge' // ✅ Edge-compatible (pas de SDK Node)
 
 const SYSTEM_PROMPT = `
 Tu es l’Assistant IA de Spectra Media.
@@ -9,54 +9,54 @@ Règles :
 - Pose 2–3 questions pour qualifier (persona, volume, outils, délai).
 - Conclus par un CTA : Essayer BettyBot (démo), InnovationPulse (Gumroad) ou formulaire de contact.
 - N’invente pas de prix.
-`
+`;
 
-const MODEL = 'gpt-4o-mini'
+const MODEL = 'gpt-4o-mini';
 
 export async function POST(req: Request) {
-  const apiKey = process.env.OPENAI_API_KEY
+  const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'Missing OPENAI_API_KEY' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
-    })
+    });
   }
 
-  let body: any = {}
-  try { body = await req.json() } catch {}
+  let body: any = {};
+  try { body = await req.json(); } catch {}
 
-  const history = Array.isArray(body?.messages) ? body.messages : []
+  const history = Array.isArray(body?.messages) ? body.messages : [];
   const recent = history.slice(-12).map((m: any) => ({
     role: m.role === 'assistant' ? 'assistant' : 'user',
     content: String(m.content ?? ''),
-  }))
+  }));
 
   const payload = {
     model: MODEL,
     temperature: 0.6,
     messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...recent],
-  }
+  };
 
   const r = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(payload),
-  })
+  });
 
   if (!r.ok) {
-    const detail = await r.text().catch(() => '')
+    const detail = await r.text().catch(() => '');
     return new Response(JSON.stringify({ error: `OpenAI ${r.status}`, detail }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
-    })
+    });
   }
 
-  const data = await r.json()
-  const reply = data?.choices?.[0]?.message?.content ?? "Désolé, je n’ai pas compris."
+  const data = await r.json();
+  const reply = data?.choices?.[0]?.message?.content ?? "Désolé, je n’ai pas compris.";
   return new Response(JSON.stringify({ reply }), {
     headers: { 'Content-Type': 'application/json' },
-  })
+  });
 }
