@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: '/favicon.ico',
-    apple: '/icon.png', // tu as `public/icon.png`
+    apple: '/icon.png', // tu as bien public/icon.png
   },
   other: { 'google-site-verification': 'gIEVCjrlWkcjjLzOLyzHkOMcbLtPEMaZwcOnB89oHNs' },
 }
