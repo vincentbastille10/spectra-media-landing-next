@@ -1,71 +1,65 @@
 // app/api/bot/route.ts
-import OpenAI from 'openai'
+export const runtime = 'edge' // compatible, rapide
 
-export const runtime = 'edge' // rapide et scalable
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-
-// Petit garde-fou pour éviter d'exploser l'API si quelqu'un spamme
-const MAX_HISTORY = 10
-
-export async function POST(req: Request) {
-  try {
-    const { messages = [] } = await req.json()
-
-    // Tronque l'historique si trop long
-    const recent = Array.isArray(messages)
-      ? messages.slice(-MAX_HISTORY)
-      : []
-
-    const system = `
-Tu es **Assistant IA de Spectra Media**, un conseiller commercial/ops chaleureux.
-Objectif : montrer en quoi nos produits d'automatisation font gagner du temps et qualifient mieux les leads.
-
-Règles:
-- Style clair, amical, en français, phrases courtes.
-- Donne des exemples concrets d’automatisations (10 idées possibles en tête) :
-  1) Chatbot de qualification + prise de RDV,
-  2) Routage leads vers Slack/CRM selon score,
-  3) Emails entrants → résumé + action next step,
-  4) Détection signaux faibles (InnovationPulse) → idées testables,
-  5) Scraping léger prospects + enrichissement (LinkedIn/website),
-  6) Relances auto (J+2/J+7) avec personnalisation,
-  7) Résumés d’appels/meetings → tâches,
-  8) Tri de factures Gmail → Google Sheets (montants/TVA/doublons),
-  9) Alertes churn/upsell via métriques d’usage,
-  10) Génération de contenus (hooks, emails, posts) à partir d’un brief.
-- Pose 2–3 questions courtes pour qualifier (persona, volume, outils, délai).
-- Toujours proposer un call-to-action final : 
-  - “Essayer BettyBot” (démo), 
-  - “InnovationPulse sur Gumroad”, 
-  - “Nous écrire via le formulaire”.
-
-Si on pose une question technique, donne la réponse pratique + étapes.
-N’invente pas de prix si on ne t’en a pas donné.
+const SYSTEM_PROMPT = `
+Tu es l’Assistant IA de Spectra Media.
+Objectif : expliquer calmement comment nos automatisations (chatbot de qualification + RDV, routage vers Slack/CRM, résumés d’emails/appels, InnovationPulse pour signaux faibles, relances auto personnalisées, scraping léger + enrichissement, tri de factures → Google Sheets, alertes churn/upsell, génération de contenus à partir d’un brief) font gagner du temps et qualifient mieux les leads.
+Règles :
+- Français, pro, chaleureux, concret, phrases courtes.
+- Pose 2–3 questions pour qualifier (persona, volume, outils, délai).
+- Conclus par un CTA : Essayer BettyBot (démo), InnovationPulse (Gumroad) ou formulaire de contact.
+- N’invente pas de prix.
 `
 
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini', // rapide/éco ; tu peux passer en gpt-4o si besoin
-      temperature: 0.6,
-      messages: [
-        { role: 'system', content: system },
-        ...recent.map((m: any) => ({
-          role: m.role === 'assistant' ? 'assistant' : 'user',
-          content: String(m.content || ''),
-        })),
-      ],
+const MODEL = 'gpt-4o-mini' // change en 'gpt-4o' si tu veux plus haut de gamme
+
+export async function POST(req: Request) {
+  const apiKey = process.env.OPENAI_API_KEY
+  if (!apiKey) {
+    return new Response(JSON.stringify({ error: 'Missing OPENAI_API_KEY' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
     })
-
-    const reply =
-      completion.choices?.[0]?.message?.content ??
-      "Désolé, je n'ai pas pu générer de réponse."
-
-    return Response.json({ reply })
-  } catch (err: any) {
-    console.error('BOT ERROR:', err?.message || err)
-    return Response.json(
-      { reply: "Oups, un souci technique. Réessayez dans un instant." },
-      { status: 200 },
-    )
   }
+
+  let body: any = {}
+  try { body = await req.json() } catch {}
+
+  const history = Array.isArray(body?.messages) ? body.messages : []
+  const recent = history.slice(-12).map((m: any) => ({
+    role: m.role === 'assistant' ? 'assistant' : 'user',
+    content: String(m.content ?? ''),
+  }))
+
+  const payload = {
+    model: MODEL,
+    temperature: 0.6,
+    messages: [
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...recent,
+    ],
+  }
+
+  const r = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+
+  if (!r.ok) {
+    const detail = await r.text().catch(() => '')
+    return new Response(JSON.stringify({ error: `OpenAI ${r.status}`, detail }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  }
+
+  const data = await r.json()
+  const reply = data?.choices?.[0]?.message?.content ?? "Désolé, je n’ai pas compris."
+  return new Response(JSON.stringify({ reply }), {
+    headers: { 'Content-Type': 'application/json' },
+  })
 }
