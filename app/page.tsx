@@ -4,9 +4,21 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
-/* -------------------------------------------------------
-   Remplit les champs cachés (URL courante & userAgent)
---------------------------------------------------------*/
+/* ---------------------------------------------
+   Styles de base réutilisés
+---------------------------------------------- */
+const inputBase: React.CSSProperties = {
+  width: '100%',
+  border: '1px solid #e5e7eb',
+  borderRadius: 12,
+  padding: '12px 14px',
+  font: 'inherit',
+  outline: 'none',
+}
+
+/* ---------------------------------------------
+   Remplit les champs cachés (URL & userAgent)
+---------------------------------------------- */
 function FormMeta() {
   useEffect(() => {
     const p = document.getElementById('pathField') as HTMLInputElement | null
@@ -17,20 +29,20 @@ function FormMeta() {
   return null
 }
 
-/* -------------------------------------------------------
-   Mini bulle de chat (appelle /api/bot côté serveur)
---------------------------------------------------------*/
+/* ---------------------------------------------
+   Bulle de chat : Assistant IA — Spectra Media
+   (appelle /api/bot qui parle à OpenAI)
+---------------------------------------------- */
 type Msg = { role: 'user' | 'assistant'; content: string }
 
 function BettyBotBubble() {
   const [open, setOpen] = useState(false)
   const [sending, setSending] = useState(false)
   const [input, setInput] = useState('')
+  const initialGreeting =
+    "Bonjour 👋 Je suis l’Assistant IA de Spectra Media. Dites-moi votre contexte et je vous montrerai comment nos automatisations (chatbot de qualification + RDV, signaux faibles InnovationPulse, tri de factures → Google Sheets) vous font gagner du temps et mieux convertir. Que souhaitez-vous améliorer en priorité ?"
   const [msgs, setMsgs] = useState<Msg[]>([
-    {
-      role: 'assistant',
-      content:"Bonjour 👋 Je suis l’Assistant IA de Spectra Media. Dites-moi votre contexte et je vous montre comment nos automatisations (chatbot de qualif, signaux faibles, tri de factures…) vont vous faire gagner du temps et mieux convertir. Que souhaitez-vous améliorer en priorité ?","Bonjour 👋 Je suis BettyBot. Dites-moi votre besoin (qualification de leads, RDV, InnovationPulse, trieur de factures).",
-    },
+    { role: 'assistant', content: initialGreeting },
   ])
   const listRef = useRef<HTMLDivElement>(null)
 
@@ -155,9 +167,9 @@ function BettyBotBubble() {
   return (
     <>
       {open && (
-        <div style={panel} role="dialog" aria-label="Assistant BettyBot">
+        <div style={panel} role="dialog" aria-label="Assistant IA — Spectra Media">
           <div style={header}>
-            <strong>BettyBot</strong>
+            <strong>Assistant IA — Spectra Media</strong>
             <button
               onClick={() => setOpen(false)}
               aria-label="Fermer"
@@ -193,7 +205,7 @@ function BettyBotBubble() {
         onClick={() => setOpen((v) => !v)}
         style={btn}
         aria-label={open ? 'Fermer le chat' : 'Ouvrir le chat'}
-        title="Parler à BettyBot"
+        title="Parler à l’Assistant IA"
       >
         💬
       </button>
@@ -201,9 +213,9 @@ function BettyBotBubble() {
   )
 }
 
-/* -------------------------------------------------------
+/* ---------------------------------------------
    Page
---------------------------------------------------------*/
+---------------------------------------------- */
 export default function Page() {
   return (
     <>
@@ -246,9 +258,31 @@ export default function Page() {
             <h1 style={{ marginTop: 16, lineHeight: 1.15 }}>
               Accélérez capture de leads & ops
               <br />
-              avec <span style={{ background: 'linear-gradient(90deg,#2563eb,#22c55e,#f59e0b,#ef4444)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>BettyBot, InnovationPulse</span>
+              avec{' '}
+              <span
+                style={{
+                  background:
+                    'linear-gradient(90deg,#2563eb,#22c55e,#f59e0b,#ef4444)',
+                  WebkitBackgroundClip: 'text',
+                  backgroundClip: 'text',
+                  color: 'transparent',
+                }}
+              >
+                BettyBot, InnovationPulse
+              </span>
               <br />
-              et outils <span style={{ background: 'linear-gradient(90deg,#2563eb,#22c55e,#f59e0b,#ef4444)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>.dmg</span>
+              et outils{' '}
+              <span
+                style={{
+                  background:
+                    'linear-gradient(90deg,#2563eb,#22c55e,#f59e0b,#ef4444)',
+                  WebkitBackgroundClip: 'text',
+                  backgroundClip: 'text',
+                  color: 'transparent',
+                }}
+              >
+                .dmg
+              </span>
             </h1>
 
             <p style={{ marginTop: 16, fontSize: 18, color: '#555' }}>
@@ -259,7 +293,9 @@ export default function Page() {
             <div style={{ marginTop: 16, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
               <a className="btn btn-primary" href="#produits">Voir les produits</a>
               <a className="btn" href="#contact">Nous contacter</a>
-              <a className="btn" href="https://bettybotdelph.onrender.com/" target="_blank" rel="noopener noreferrer">Lancer BettyBot ↗</a>
+              <a className="btn" href="https://bettybotdelph.onrender.com/" target="_blank" rel="noopener noreferrer">
+                Lancer BettyBot ↗
+              </a>
             </div>
 
             <ul style={{ marginTop: 16, color: '#555', fontSize: 14, lineHeight: 1.7 }}>
@@ -373,12 +409,19 @@ export default function Page() {
             className="card form"
             action="https://script.google.com/macros/s/AKfycbynkOfaP-YwcpOtFE-Cjllhfpcde6_7_xFACht31SEW7RpZytSFWgxIyM2CH9YpIlGzwA/exec"
             method="POST"
-            style={{ background: '#fff', borderRadius: 16, padding: 16, boxShadow: '0 10px 24px rgba(0,0,0,.06)', display: 'grid', gap: 10 }}
+            style={{
+              background: '#fff',
+              borderRadius: 16,
+              padding: 16,
+              boxShadow: '0 10px 24px rgba(0,0,0,.06)',
+              display: 'grid',
+              gap: 10,
+            }}
           >
             <input name="email" type="email" placeholder="Email" style={inputBase} required />
             <input name="phone" type="tel" placeholder="Téléphone (requis)" style={inputBase} required />
             <input name="nom" placeholder="Nom / Entreprise" style={inputBase} />
-            {/* La feuille a la colonne “objet de la demande” → on peut envoyer soit ce nom exact, soit "objet" */}
+            {/* La feuille a "objet de la demande" → on poste avec ce nom exact */}
             <input name="objet de la demande" placeholder="Objet" style={inputBase} />
             <textarea name="message" placeholder="Message" style={{ ...inputBase, minHeight: 120 }} />
 
@@ -400,20 +443,8 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Bulle de chat */}
+      {/* Bulle de chat (toujours visible) */}
       <BettyBotBubble />
     </>
   )
-}
-
-/* -------------------------------------------------------
-   Styles de base réutilisés
---------------------------------------------------------*/
-const inputBase: React.CSSProperties = {
-  width: '100%',
-  border: '1px solid #e5e7eb',
-  borderRadius: 12,
-  padding: '12px 14px',
-  font: 'inherit',
-  outline: 'none',
 }
