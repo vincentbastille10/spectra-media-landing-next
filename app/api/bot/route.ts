@@ -1,5 +1,6 @@
 // app/api/bot/route.ts
 export const runtime = 'edge' // ✅ Edge-compatible (pas de SDK Node)
+
 const SYSTEM_PROMPT = `
 Tu es l’Assistant IA de Spectra Media.
 Objectif : expliquer calmement comment nos automatisations (chatbot de qualification + RDV, routage leads vers Slack/CRM, résumés d’emails/appels, InnovationPulse pour signaux faibles, relances auto personnalisées, scraping léger + enrichissement, tri de factures → Google Sheets, alertes churn/upsell, génération de contenus à partir d’un brief) font gagner du temps et qualifient mieux les leads.
@@ -16,8 +17,7 @@ export async function POST(req: Request) {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'Missing OPENAI_API_KEY' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
+      status: 500, headers: { 'Content-Type': 'application/json' },
     });
   }
 
@@ -40,22 +40,4 @@ export async function POST(req: Request) {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (!r.ok) {
-    const detail = await r.text().catch(() => '');
-    return new Response(JSON.stringify({ error: `OpenAI ${r.status}`, detail }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const data = await r.json();
-  const reply = data?.choices?.[0]?.message?.content ?? "Désolé, je n’ai pas compris.";
-  return new Response(JSON.stringify({ reply }), {
-    headers: { 'Content-Type': 'application/json' },
-  });
-}
+      'Co
