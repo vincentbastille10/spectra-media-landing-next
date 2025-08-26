@@ -29,8 +29,7 @@ function BettyBotBubble() {
   const [msgs, setMsgs] = useState<Msg[]>([
     {
       role: 'assistant',
-      content:
-        "Bonjour 👋 Je suis BettyBot. Dites-moi votre besoin (qualification de leads, RDV, InnovationPulse, trieur de factures).",
+      content:"Bonjour 👋 Je suis l’Assistant IA de Spectra Media. Dites-moi votre contexte et je vous montre comment nos automatisations (chatbot de qualif, signaux faibles, tri de factures…) vont vous faire gagner du temps et mieux convertir. Que souhaitez-vous améliorer en priorité ?","Bonjour 👋 Je suis BettyBot. Dites-moi votre besoin (qualification de leads, RDV, InnovationPulse, trieur de factures).",
     },
   ])
   const listRef = useRef<HTMLDivElement>(null)
