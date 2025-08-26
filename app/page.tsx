@@ -10,9 +10,7 @@ const APPSCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbynkOfaP-YwcpOtFE-Cjllhfpcde6_7_xFACht31SEW7RpZytSFWgxIyM2CH9YpIlGzwA/exec'
 
 export default function HomePage() {
-  // -------------------
-  // Chat assistant
-  // -------------------
+  // ------------------- Chat assistant -------------------
   const [msgs, setMsgs] = useState<Msg[]>([
     {
       role: 'assistant',
@@ -54,9 +52,7 @@ export default function HomePage() {
     }
   }
 
-  // -------------------
-  // Formulaire → Google Sheets (Apps Script)
-  // -------------------
+  // ------------------- Formulaire → Google Sheets -------------------
   const [form, setForm] = useState({ email: '', nom: '', objet: '', tel: '' })
   const [sent, setSent] = useState<string | null>(null)
 
@@ -65,14 +61,13 @@ export default function HomePage() {
     setSent(null)
 
     const fd = new FormData()
-    // Noms de colonnes présents dans ta Sheet : email, nom, objet de la demande (+ tel optionnel)
+    // Nom de colonnes de ta Sheet : email, nom, objet de la demande, tel
     fd.append('email', form.email)
     fd.append('nom', form.nom)
-    fd.append('objet', form.objet)
+    fd.append('objet de la demande', form.objet)
     fd.append('tel', form.tel)
 
     try {
-      // La plupart des Apps Script acceptent ce POST simple (no-cors + FormData) quand le déploiement est public
       await fetch(APPSCRIPT_URL, { method: 'POST', body: fd, mode: 'no-cors' as RequestMode })
       setSent('Merci ! Nous revenons vite vers vous.')
       setForm({ email: '', nom: '', objet: '', tel: '' })
@@ -87,7 +82,7 @@ export default function HomePage() {
       <section className="section">
         <div className="wrap" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
           <div>
-            <div style={{ fontSize: 14, marginBottom: 8 }}>🚀 Automatisation IA, sans blabla</div>
+            <div className="badge" style={{ marginBottom: 8 }}>🚀 Automatisation IA, sans blabla</div>
             <h1 style={{ fontSize: 42, lineHeight: 1.1, margin: '8px 0 12px' }}>
               Accélérez capture de leads & ops
               <br />
@@ -144,37 +139,15 @@ export default function HomePage() {
       <section className="section" id="assistant">
         <div className="wrap">
           <h2 style={{ marginBottom: 12 }}>Assistant IA — Spectra Media</h2>
-          <div
-            style={{
-              border: '1px solid #eee',
-              borderRadius: 12,
-              padding: 12,
-              maxWidth: 680,
-            }}
-          >
+          <div className="card" style={{ padding: 12, maxWidth: 680 }}>
             <div
               ref={listRef}
-              style={{
-                maxHeight: 300,
-                overflowY: 'auto',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 8,
-                paddingBottom: 8,
-              }}
+              className="chat-list"
             >
               {msgs.map((m, i) => (
                 <div
                   key={i}
-                  style={{
-                    alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start',
-                    background: m.role === 'user' ? '#111' : '#f3f4f6',
-                    color: m.role === 'user' ? '#fff' : '#111',
-                    padding: '8px 12px',
-                    borderRadius: 10,
-                    maxWidth: '80%',
-                    whiteSpace: 'pre-wrap',
-                  }}
+                  className={`chat-bubble ${m.role === 'user' ? 'user' : 'assistant'}`}
                 >
                   {m.content}
                 </div>
@@ -210,7 +183,6 @@ export default function HomePage() {
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #ddd' }}
               />
             </label>
 
@@ -220,7 +192,6 @@ export default function HomePage() {
                 required
                 value={form.nom}
                 onChange={(e) => setForm({ ...form, nom: e.target.value })}
-                style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #ddd' }}
               />
             </label>
 
@@ -229,7 +200,6 @@ export default function HomePage() {
               <input
                 value={form.tel}
                 onChange={(e) => setForm({ ...form, tel: e.target.value })}
-                style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #ddd' }}
               />
             </label>
 
@@ -240,7 +210,6 @@ export default function HomePage() {
                 value={form.objet}
                 onChange={(e) => setForm({ ...form, objet: e.target.value })}
                 placeholder="Ex : qualif de leads pour site SaaS"
-                style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #ddd' }}
               />
             </label>
 
