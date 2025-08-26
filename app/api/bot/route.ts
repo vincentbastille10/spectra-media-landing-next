@@ -1,91 +1,71 @@
 // app/api/bot/route.ts
-export const runtime = 'edge';
+import OpenAI from 'openai'
 
-type ChatMsg = { role: 'system' | 'user' | 'assistant'; content: string };
+export const runtime = 'edge' // rapide et scalable
 
-const SYSTEM_PROMPT: ChatMsg = {
-  role: 'system',
-  content:
-    "Tu es **Spectra Assistant**, conseiller **chaleureux, subtil et engageant**. " +
-    "Tu vends des **agents conversationnels LLM** personnalisés pour PME/ETI (site, WhatsApp, email). " +
-    "Style: clair, empathique, naturel, avec des emojis **parcimonieux**. " +
-    "À CHAQUE réponse: (1) reformule brièvement le contexte, (2) propose **2–3 pistes concrètes** " +
-    "avec intégrations (Google Sheets, Calendly, Slack, WhatsApp, Zapier/webhooks), (3) suggère un **prochain pas léger** " +
-    "(mini-POC, call 20 min), (4) chiffre à la louche 1–2 **KPI** (temps gagné, % conversion, délai). " +
-    "Évite le jargon; donne des exemples sectoriels (SaaS, e-commerce, services pro, industrie) quand utile. " +
-    "Si l’usager est sec/énervé, reste calme et **bienveillant**.",
-};
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
-function providerChoice() {
-  if (process.env.LLM_PROVIDER) return process.env.LLM_PROVIDER;
-  if (process.env.TOGETHER_API_KEY) return 'together';
-  if (process.env.OPENAI_API_KEY) return 'openai';
-  return 'none';
-}
+// Petit garde-fou pour éviter d'exploser l'API si quelqu'un spamme
+const MAX_HISTORY = 10
 
 export async function POST(req: Request) {
   try {
-    const { history } = (await req.json()) as { history: ChatMsg[] };
-    const messages: ChatMsg[] = [SYSTEM_PROMPT, ...(history || [])];
+    const { messages = [] } = await req.json()
 
-    const provider = providerChoice();
+    // Tronque l'historique si trop long
+    const recent = Array.isArray(messages)
+      ? messages.slice(-MAX_HISTORY)
+      : []
 
-    if (provider === 'together') {
-      const model = process.env.LLM_MODEL || 'meta-llama/Meta-Llama-3.1-8B-Instruct';
-      const r = await fetch('https://api.together.xyz/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${process.env.TOGETHER_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model,
-          messages,
-          temperature: 0.6,
-          max_tokens: 700,
-        }),
-      });
-      if (!r.ok) {
-        const t = await r.text();
-        return new Response(JSON.stringify({ reply: `Erreur LLM: ${t}` }), { status: 500 });
-      }
-      const j = await r.json();
-      const reply = j?.choices?.[0]?.message?.content ?? 'Je peux proposer des options concrètes si tu précises le contexte.';
-      return Response.json({ reply });
-    }
+    const system = `
+Tu es **Assistant IA de Spectra Media**, un conseiller commercial/ops chaleureux.
+Objectif : montrer en quoi nos produits d'automatisation font gagner du temps et qualifient mieux les leads.
 
-    if (provider === 'openai') {
-      const model = process.env.LLM_MODEL || 'gpt-4o-mini';
-      const r = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model,
-          messages,
-          temperature: 0.6,
-          max_tokens: 700,
-        }),
-      });
-      if (!r.ok) {
-        const t = await r.text();
-        return new Response(JSON.stringify({ reply: `Erreur LLM: ${t}` }), { status: 500 });
-      }
-      const j = await r.json();
-      const reply = j?.choices?.[0]?.message?.content ?? 'Je peux proposer des options concrètes si tu précises le contexte.';
-      return Response.json({ reply });
-    }
+Règles:
+- Style clair, amical, en français, phrases courtes.
+- Donne des exemples concrets d’automatisations (10 idées possibles en tête) :
+  1) Chatbot de qualification + prise de RDV,
+  2) Routage leads vers Slack/CRM selon score,
+  3) Emails entrants → résumé + action next step,
+  4) Détection signaux faibles (InnovationPulse) → idées testables,
+  5) Scraping léger prospects + enrichissement (LinkedIn/website),
+  6) Relances auto (J+2/J+7) avec personnalisation,
+  7) Résumés d’appels/meetings → tâches,
+  8) Tri de factures Gmail → Google Sheets (montants/TVA/doublons),
+  9) Alertes churn/upsell via métriques d’usage,
+  10) Génération de contenus (hooks, emails, posts) à partir d’un brief.
+- Pose 2–3 questions courtes pour qualifier (persona, volume, outils, délai).
+- Toujours proposer un call-to-action final : 
+  - “Essayer BettyBot” (démo), 
+  - “InnovationPulse sur Gumroad”, 
+  - “Nous écrire via le formulaire”.
 
-    return Response.json({
-      reply:
-        "Note: aucun fournisseur LLM n'est configuré (TOGETHER_API_KEY / OPENAI_API_KEY). " +
-        "Active une clé dans Vercel → Settings → Environment Variables.",
-    });
-  } catch (e: any) {
-    return new Response(JSON.stringify({ reply: `Erreur: ${e?.message || 'inconnue'}` }), {
-      status: 500,
-    });
+Si on pose une question technique, donne la réponse pratique + étapes.
+N’invente pas de prix si on ne t’en a pas donné.
+`
+
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o-mini', // rapide/éco ; tu peux passer en gpt-4o si besoin
+      temperature: 0.6,
+      messages: [
+        { role: 'system', content: system },
+        ...recent.map((m: any) => ({
+          role: m.role === 'assistant' ? 'assistant' : 'user',
+          content: String(m.content || ''),
+        })),
+      ],
+    })
+
+    const reply =
+      completion.choices?.[0]?.message?.content ??
+      "Désolé, je n'ai pas pu générer de réponse."
+
+    return Response.json({ reply })
+  } catch (err: any) {
+    console.error('BOT ERROR:', err?.message || err)
+    return Response.json(
+      { reply: "Oups, un souci technique. Réessayez dans un instant." },
+      { status: 200 },
+    )
   }
 }
