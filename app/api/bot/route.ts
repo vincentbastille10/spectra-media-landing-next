@@ -1,5 +1,5 @@
 // app/api/bot/route.ts
-export const runtime = 'edge' // compatible, rapide
+export const runtime = 'edge' // pas de SDK, 100% compatible Vercel Edge
 
 const SYSTEM_PROMPT = `
 Tu es l’Assistant IA de Spectra Media.
@@ -11,7 +11,7 @@ Règles :
 - N’invente pas de prix.
 `
 
-const MODEL = 'gpt-4o-mini' // change en 'gpt-4o' si tu veux plus haut de gamme
+const MODEL = 'gpt-4o-mini'
 
 export async function POST(req: Request) {
   const apiKey = process.env.OPENAI_API_KEY
@@ -34,10 +34,7 @@ export async function POST(req: Request) {
   const payload = {
     model: MODEL,
     temperature: 0.6,
-    messages: [
-      { role: 'system', content: SYSTEM_PROMPT },
-      ...recent,
-    ],
+    messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...recent],
   }
 
   const r = await fetch('https://api.openai.com/v1/chat/completions', {
