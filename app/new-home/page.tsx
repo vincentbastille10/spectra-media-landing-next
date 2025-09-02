@@ -1,4 +1,4 @@
-// app/new-home/page.tsx — page autonome (App Router)
+// app/new-home/page.tsx — page autonome (App Router, sans styled-jsx)
 export const metadata = {
   title: "Spectra Media AI — Des agents IA qui travaillent dès ce mois-ci",
   description:
@@ -19,10 +19,10 @@ export default function Page() {
             </h1>
             <p className="smai-sub">
               Générez des <strong>rendez-vous</strong>, triez vos <strong>factures</strong>,
-              répondez 24/7 à vos <strong>clients</strong> et retrouvez vos <strong>documents</strong> —
-              sans projet interminable. <em>Multi-LLM</em> (évite le lock-in),
-              <em> prix clair à l’abonnement</em>, <em>adoption côté métiers</em>.
+              répondez 24/7 à vos <strong>clients</strong> et retrouvez vos <strong>documents</strong> — sans projet interminable.
+              <em> Multi-LLM</em> (évite le lock-in), <em>prix clair à l’abonnement</em>, <em>adoption côté métiers</em>.
             </p>
+
             <div className="smai-cta">
               <a className="smai-btn primary" href="#demo">Voir une démo (15 min)</a>
               <a className="smai-btn secondary" href="#offres">Essayer un agent 14 jours</a>
@@ -103,41 +103,6 @@ export default function Page() {
         </section>
       </main>
 
-      {/* Styles intégrés pour cette page */}
-      <style jsx global>{`
-        :root { --smai-bg:#0b0c10; --smai-bg-2:#111318; --smai-fg:#fff; --smai-muted:#a1a9b8; --smai-accent:#7c3aed; --smai-accent-2:#22c55e; --smai-card:rgba(255,255,255,.06); --smai-border:rgba(255,255,255,.12); --smai-radius:16px; --smai-shadow:0 10px 30px rgba(0,0,0,.35); }
-        .smai-wrap{color:var(--smai-fg);background:radial-gradient(1200px 600px at 80% -100px, rgba(124,58,237,.25), transparent 60%), linear-gradient(180deg,var(--smai-bg),var(--smai-bg-2));font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-        .smai-container{max-width:1120px;margin:0 auto;padding:32px 20px}
-        .smai-eyebrow{display:inline-block;padding:6px 12px;border:1px solid var(--smai-border);border-radius:999px;font-size:12px;letter-spacing:.4px;text-transform:uppercase;color:var(--smai-muted)}
-        .smai-title{font-size:clamp(28px,4.2vw,56px);line-height:1.05;font-weight:800;margin:14px 0}
-        .smai-title .accent{background:linear-gradient(90deg,var(--smai-accent),#3b82f6);-webkit-background-clip:text;background-clip:text;color:transparent}
-        .smai-sub{color:var(--smai-muted);font-size:clamp(15px,2vw,18px);max-width:760px}
-        .smai-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
-        .smai-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 18px;border-radius:12px;text-decoration:none;font-weight:700;border:1px solid var(--smai-border);transition:transform .12s ease,background .2s ease}
-        .smai-btn:active{transform:translateY(1px)}
-        .smai-btn.primary{background:var(--smai-accent);color:#fff;border-color:transparent}
-        .smai-btn.secondary{background:transparent;color:#e5e7eb}
-        .smai-badges{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
-        .smai-badge{padding:8px 12px;font-size:12px;border:1px dashed var(--smai-border);border-radius:999px;color:var(--smai-muted)}
-        .smai-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:28px 0 6px}
-        .smai-metric{background:var(--smai-card);border:1px solid var(--smai-border);border-radius:var(--smai-radius);padding:16px;text-align:center;box-shadow:var(--smai-shadow)}
-        .smai-metric h4{font-size:28px;margin:0 0 6px}
-        .smai-metric p{margin:0;color:var(--smai-muted);font-size:14px}
-        .smai-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:24px}
-        .smai-card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border:1px solid var(--smai-border);border-radius:var(--smai-radius);padding:22px;box-shadow:var(--smai-shadow);display:flex;flex-direction:column;gap:10px}
-        .smai-card h3{margin:0;font-size:20px}
-        .smai-card ul{margin:10px 0 0 0;padding:0 0 0 18px}
-        .smai-card li{margin:6px 0;color:#e5e7eb}
-        .smai-chip{display:inline-block;font-size:12px;color:#cbd5e1;background:rgba(124,58,237,.15);border:1px solid var(--smai-border);border-radius:999px;padding:6px 10px}
-        .smai-price{margin-top:auto;display:flex;align-items:baseline;gap:8px}
-        .smai-price .n{font-size:22px;font-weight:800}
-        .smai-price .u{font-size:12px;color:var(--smai-muted)}
-        .smai-faq{margin-top:34px}
-        .smai-faq details{background:var(--smai-card);border:1px solid var(--smai-border);border-radius:12px;padding:14px 16px;margin-bottom:10px}
-        .smai-faq summary{cursor:pointer;font-weight:700}
-        .smai-faq p{color:#e5e7eb;margin:10px 0 0}
-        @media (max-width:900px){.smai-metrics{grid-template-columns:1fr}.smai-grid{grid-template-columns:1fr}}
-      `}</style>
-    </>
-  );
-}
+      {/* Styles globaux intégrés sans styled-jsx */}
+      <style>{`
+        :root { --smai-bg:#0b0c10; --smai-bg-2:#111318; --smai-fg:#fff; --smai-muted:#a1a9b8; --smai-accent:#7c3aed; --smai-accent-2:#22c55e;
