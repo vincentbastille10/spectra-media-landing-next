@@ -1,26 +1,23 @@
-# Spectra Media Landing — Next.js 14
+# spectramedia.online — Page SEO “Comment faire de l’argent avec l’IA”
 
-Ce dépôt contient une landing page Next.js pour la marque Spectra Media ainsi que quelques articles de blog. Il comprend :
+Ce bundle ajoute une page dédiée **/comment-faire-argent-avec-ia/** pour capter la requête Google et pousser vers le produit Gumroad.
 
-- Une page d’accueil présentant la flotte **Betty Bot**, l’outil prédictif **InnovationPulse** et une application macOS pour trier les factures ;
-- Cinq articles de blog écrits en JSX pur (pas de `dangerouslySetInnerHTML`), dans `app/(site)/blog/…` ;
-- Un favicon coloré dans `public/favicon.png` et des métadonnées SEO de base ;
-- Un fichier `robots.ts` et `sitemap.ts` pour l’indexation Google.
-
-## Installation
+## Déploiement (GitHub Pages)
+1. Dézippez le dossier et copiez son contenu à la racine de votre dépôt `spectramedia.online` (ou dans la branche `gh-pages` si vous utilisez un repo différent).
+2. Assurez-vous que le fichier **CNAME** contient bien `spectramedia.online` et que le DNS de votre domaine pointe vers GitHub Pages.
+3. Commitez et poussez :
 
 ```bash
-pnpm install  # ou npm install / yarn install
-npm run dev   # lance le serveur de développement sur http://localhost:3000
-npm run build # construit l’application pour la production
+git add .
+git commit -m "feat(seo): add /comment-faire-argent-avec-ia page + sitemap + robots"
+git push
 ```
 
-## Déploiement
+4. Ouvrez **https://spectramedia.online/comment-faire-argent-avec-ia/**
 
-Déployez ce projet sur Vercel en l’important depuis GitHub. Ajoutez votre domaine via les paramètres du projet et pointez vos DNS vers les serveurs Vercel. Le fichier `robots.ts` expose le sitemap à `https://votredomaine/sitemap.xml`.
+## Indexation
+- Ajoutez `https://spectramedia.online/sitemap.xml` dans Google Search Console (propriété Domaine).
+- Demandez une indexation de l’URL `/comment-faire-argent-avec-ia/`.
+- Optionnel : lancez une campagne Search Ads sur le mot-clé exact pendant la phase d’indexation.
 
-## Personnalisation
-
-- Remplacez `public/favicon.png` par votre propre icône si nécessaire. Veillez à garder un format carré (512×512 recommandé).
-- Mettez à jour les liens dans `app/page.tsx` pour pointer vers vos services réels.
-- Ajoutez de nouveaux articles dans `app/(site)/blog` en suivant la structure des fichiers existants.
+_MàJ : 2025-09-03_
