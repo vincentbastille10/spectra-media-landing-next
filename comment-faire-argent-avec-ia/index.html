@@ -34,17 +34,21 @@
     .mute{color:var(--muted)}
     footer{margin:24px 0;color:var(--muted);font-size:14px}
 
-    /* === Bloc Abonnement Betty === */
-    .betty-sub{margin-top:28px;border:1px solid var(--line);border-radius:18px;padding:24px;background:#fff;display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
-    .betty-badge{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#334155;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:999px;padding:6px 10px;margin-bottom:10px}
-    .betty-title{font-size:clamp(22px,3.5vw,34px);margin:4px 0 8px}
-    .betty-points{display:grid;gap:8px;margin:10px 0 14px}
-    .betty-points .pt{display:flex;gap:10px}
-    .betty-cta{display:inline-flex;align-items:center;gap:10px;padding:14px 18px;border-radius:14px;background:#4f46e5;color:#fff;font-weight:800;text-decoration:none;border:none;cursor:pointer}
-    .betty-cta small{opacity:.9;font-weight:600}
-    .betty-card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fafbff}
-    .price{font-weight:900;font-size:28px}
-    @media (max-width:820px){.betty-sub{grid-template-columns:1fr}}
+    /* bouton Betty */
+    .betty-btn{
+      display:inline-block;
+      margin-top:26px;
+      padding:16px 24px;
+      border-radius:14px;
+      background:#4f46e5;
+      color:#fff;
+      text-decoration:none;
+      font-weight:800;
+      font-size:18px;
+      box-shadow:0 6px 16px rgba(79,70,229,.25);
+      transition:.25s;
+    }
+    .betty-btn:hover{background:#3730a3;transform:translateY(-2px)}
   </style>
 </head>
 <body>
@@ -54,43 +58,12 @@
       <p>Un guide pratico-pratique : cas d’usage réels, prompts, checklists et modèles pour créer des revenus avec l’IA — sans coder.</p>
       <a class="cta" href="https://spectramedia.gumroad.com/l/InnovationPulse?utm_source=seo-page&utm_medium=referral&utm_campaign=argent-ia" rel="nofollow sponsored">Accéder au guide sur Gumroad</a>
       <div class="kws">Aussi recherché : <em>comment gagner de l’argent avec l’IA</em>, <em>monétiser l’IA</em>, <em>idées business IA</em>.</div>
+
+      <!-- 👇 Nouveau bouton vers l’abonnement Betty Bot -->
+      <a class="betty-btn" href="https://spectra-media-landing-next.vercel.app/abonnement" rel="nofollow">
+        🚀 Créez votre robot métier Betty Bot
+      </a>
     </section>
-
-    <!-- ===== Abonnement Betty (NOUVEAU) ===== -->
-    <section class="betty-sub" aria-label="Créer votre robot métier">
-      <div>
-        <span class="betty-badge">🤖 Betty Bot • Propulsé par Spectra Media AI</span>
-        <h2 class="betty-title">Créez votre robot métier en 3 minutes</h2>
-        <p class="mute" style="margin:0 0 8px">
-          Une assistante qui capte vos prospects 24h/24 et vous envoie les demandes qualifiées par email.
-        </p>
-
-        <div class="betty-points">
-          <div class="pt"><span>✅</span><span>Installation offerte & personnalisation (avatar, couleur, ton)</span></div>
-          <div class="pt"><span>✅</span><span>Plug-and-play pour <strong>avocats</strong>, <strong>immobilier</strong>, <strong>santé</strong>, etc.</span></div>
-          <div class="pt"><span>✅</span><span>Intégration sur votre site : un simple script ou iFrame</span></div>
-        </div>
-
-        <button id="subscribeBtn" class="betty-cta">
-          <span>Créer ma Betty – <span class="price">29,99 €</span>/mois</span>
-          <small>Annulable à tout moment</small>
-        </button>
-      </div>
-
-      <div class="betty-card" role="complementary" aria-label="Ce qui est inclus">
-        <h3 style="margin:0 0 8px">Ce qui est inclus</h3>
-        <ul style="margin:0;padding-left:18px;line-height:1.6">
-          <li>1 chatbot métier prêt à l’emploi</li>
-          <li>Capture & qualification de leads</li>
-          <li>Badge “Verified by Betty”</li>
-          <li>Support par email</li>
-        </ul>
-        <p class="mute" style="margin:10px 0 0;font-size:12px">
-          Besoin d’un pack multi-sites ou d’une offre annuelle ? Parlez-nous.
-        </p>
-      </div>
-    </section>
-    <!-- ===== /Abonnement Betty ===== -->
 
     <section class="grid" aria-label="Bénéfices et public">
       <div class="card"><h2>Ce que tu obtiens</h2><ul>
@@ -117,46 +90,11 @@
     <footer>© 2025 Spectra Media — <a href="https://spectramedia.online">spectramedia.online</a></footer>
   </main>
 
-  <!-- FAQ structured data -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"FAQPage",
-    "mainEntity":[
-      {"@type":"Question","name":"Peut-on gagner de l’argent avec l’IA sans coder ?","acceptedAnswer":{"@type":"Answer","text":"Oui : services IA done-for-you, automatisations no-code, micro-produits numériques, etc."}},
-      {"@type":"Question","name":"Combien de temps pour un premier résultat ?","acceptedAnswer":{"@type":"Answer","text":"Le guide propose un plan 7 jours pour tester une première offre."}},
-      {"@type":"Question","name":"Est-ce légal et éthique ?","acceptedAnswer":{"@type":"Answer","text":"Oui, méthodes conformes à la loi française et à la propriété intellectuelle."}}
-    ]
-  }
-  </script>
-
-  <!-- Scripts page : rester en haut + Stripe Checkout -->
+  <!-- Rester en haut de la page -->
   <script>
-    // ❶ Toujours rester tout en haut au chargement
     try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch(e){}
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' || 'auto' });
-    window.addEventListener('load', () => { window.scrollTo(0,0); });
-
-    // ❷ Redirection vers Stripe Checkout (nécessite l'API route côté Next/Vercel)
-    const btn = document.getElementById('subscribeBtn');
-    if (btn) {
-      btn.addEventListener('click', async () => {
-        btn.disabled = true;
-        try {
-          const r = await fetch('/api/create-checkout-session', { method: 'POST' });
-          const data = await r.json();
-          if (data && data.url) {
-            window.location.href = data.url;
-          } else {
-            alert("Impossible d'ouvrir Stripe. Réessaie dans un instant.");
-          }
-        } catch (e) {
-          alert("Erreur réseau. Merci de réessayer.");
-        } finally {
-          btn.disabled = false;
-        }
-      });
-    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    window.addEventListener('load', () => window.scrollTo(0,0));
   </script>
 </body>
 </html>
