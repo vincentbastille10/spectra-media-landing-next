@@ -1,0 +1,29 @@
+"use client";
+
+export default function AbonnementBetty() {
+  const createSession = async () => {
+    const res = await fetch("/api/create-checkout-session", { method: "POST" });
+    const data = await res.json();
+    if (data?.url) window.location.href = data.url;
+    else alert("Impossible d'ouvrir Stripe. Réessaie dans un instant.");
+  };
+
+  return (
+    <section className="py-16 text-center bg-gradient-to-b from-white to-gray-50">
+      <h2 className="text-3xl font-bold mb-4">
+        Abonnez-vous à <span className="text-indigo-600">Betty Bot</span>
+      </h2>
+      <p className="text-gray-600 max-w-xl mx-auto mb-8">
+        Votre assistante IA métier, prête à qualifier vos prospects 24h/24.
+        Installation et personnalisation offertes.
+      </p>
+      <button
+        onClick={createSession}
+        className="px-6 py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition"
+      >
+        S’abonner – 29,99 €/mois
+      </button>
+      <p className="text-xs text-gray-400 mt-3">Annulable à tout moment.</p>
+    </section>
+  );
+}
