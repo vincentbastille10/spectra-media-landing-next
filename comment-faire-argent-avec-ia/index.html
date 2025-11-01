@@ -20,7 +20,8 @@
 
   <style>
     :root{--ink:#0b0f15;--muted:#5f6b7a;--line:#e9eef5;--bg:#ffffff;--grad:linear-gradient(135deg,#ffd35a,#9bf3f0 60%,#c09bff)}
-    *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--ink);background:#fff}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--ink);background:#fff}
     .wrap{max-width:1000px;margin:auto;padding:24px}
     .hero{padding:28px 24px;border-radius:18px;background:var(--grad)}
     h1{margin:0 0 6px;font-size:clamp(28px,4vw,42px)}
@@ -34,21 +35,21 @@
     .mute{color:var(--muted)}
     footer{margin:24px 0;color:var(--muted);font-size:14px}
 
-    /* bouton Betty */
+    /* Bouton Betty */
     .betty-btn{
       display:inline-block;
-      margin-top:26px;
-      padding:16px 24px;
-      border-radius:14px;
+      margin-top:22px;
+      padding:16px 28px;
       background:#4f46e5;
       color:#fff;
-      text-decoration:none;
       font-weight:800;
+      border-radius:14px;
+      text-decoration:none;
       font-size:18px;
-      box-shadow:0 6px 16px rgba(79,70,229,.25);
+      box-shadow:0 8px 20px rgba(79,70,229,.3);
       transition:.25s;
     }
-    .betty-btn:hover{background:#3730a3;transform:translateY(-2px)}
+    .betty-btn:hover{background:#3730a3;transform:translateY(-2px);}
   </style>
 </head>
 <body>
@@ -56,13 +57,19 @@
     <section class="hero" aria-labelledby="h1">
       <h1 id="h1">Comment faire de l’argent avec l’IA</h1>
       <p>Un guide pratico-pratique : cas d’usage réels, prompts, checklists et modèles pour créer des revenus avec l’IA — sans coder.</p>
-      <a class="cta" href="https://spectramedia.gumroad.com/l/InnovationPulse?utm_source=seo-page&utm_medium=referral&utm_campaign=argent-ia" rel="nofollow sponsored">Accéder au guide sur Gumroad</a>
-      <div class="kws">Aussi recherché : <em>comment gagner de l’argent avec l’IA</em>, <em>monétiser l’IA</em>, <em>idées business IA</em>.</div>
 
-      <!-- 👇 Nouveau bouton vers l’abonnement Betty Bot -->
-      <a class="betty-btn" href="https://spectra-media-landing-next.vercel.app/abonnement" rel="nofollow">
-        🚀 Créez votre robot métier Betty Bot
+      <a class="cta" href="https://spectramedia.gumroad.com/l/InnovationPulse?utm_source=seo-page&utm_medium=referral&utm_campaign=argent-ia" rel="nofollow sponsored">
+        Accéder au guide sur Gumroad
       </a>
+
+      <!-- 👇 Nouveau bouton vers la page d’abonnement -->
+      <a class="betty-btn" href="https://betty-abonnement-version2.vercel.app" rel="nofollow">
+        🚀 Créez votre bot métier, qualifieur de leads (+40%) en 3 minutes
+      </a>
+
+      <div class="kws">
+        Aussi recherché : <em>comment gagner de l’argent avec l’IA</em>, <em>monétiser l’IA</em>, <em>idées business IA</em>.
+      </div>
     </section>
 
     <section class="grid" aria-label="Bénéfices et public">
@@ -87,14 +94,28 @@
       <details><summary>Est-ce légal et éthique ?</summary><p>Oui : les méthodes présentées respectent la loi française et la propriété intellectuelle.</p></details>
       <p class="mute">Dernière mise à jour : 2025-09-03</p>
     </section>
+
     <footer>© 2025 Spectra Media — <a href="https://spectramedia.online">spectramedia.online</a></footer>
   </main>
 
-  <!-- Rester en haut de la page -->
+  <!-- Empêche tout scroll initial -->
   <script>
-    try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch(e){}
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    window.addEventListener('load', () => window.scrollTo(0,0));
+    try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}
+    window.scrollTo(0,0);
+    window.addEventListener('load',()=>window.scrollTo(0,0));
+  </script>
+
+  <!-- Données structurées FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"Peut-on gagner de l’argent avec l’IA sans coder ?","acceptedAnswer":{"@type":"Answer","text":"Oui : services IA done-for-you, automatisations no-code, micro-produits numériques, etc."}},
+      {"@type":"Question","name":"Combien de temps pour un premier résultat ?","acceptedAnswer":{"@type":"Answer","text":"Le guide propose un plan 7 jours pour tester une première offre."}},
+      {"@type":"Question","name":"Est-ce légal et éthique ?","acceptedAnswer":{"@type":"Answer","text":"Oui, méthodes conformes à la loi française et à la propriété intellectuelle."}}
+    ]
+  }
   </script>
 </body>
 </html>
