@@ -45,174 +45,325 @@
 
   <style>
     :root{
-      --bg:#0b0b12;--card:#11121a;--muted:#b2b5c5;--text:#e9ebf4;
-      --brand:#635bff;--brand-2:#22d3ee;--radius:18px
+      --bg:#050510;
+      --card:#0f1120;
+      --muted:#b2b5c5;
+      --text:#f3f4ff;
+      --brand:#635bff;
+      --brand-2:#22d3ee;
+      --radius:18px;
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;height:100%;
       color:var(--text);
       background:
-        radial-gradient(1200px 600px at 5% 5%, #1a1630 0, rgba(10,10,14,0) 60%),
-        radial-gradient(1200px 600px at 95% 0%, #102b2d 0, rgba(10,10,14,0) 55%),
+        radial-gradient(1200px 600px at 5% 5%, #211a46 0, rgba(5,5,12,0) 60%),
+        radial-gradient(1200px 600px at 95% 0%, #0c3436 0, rgba(5,5,12,0) 55%),
         var(--bg);
       font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji";
     }
     a{color:inherit;text-decoration:none}
-    .container{max-width:1120px;margin:0 auto;padding:28px}
+    .container{max-width:1120px;margin:0 auto;padding:26px}
+
+    /* HEADER */
 
     header{
-      position:sticky;top:0;z-index:20;
-      backdrop-filter:saturate(140%) blur(8px);
-      background:linear-gradient(180deg, rgba(15,15,20,.9), rgba(15,15,20,.65));
-      border-bottom:1px solid #1f2333;
+      position:sticky;top:0;z-index:40;
+      backdrop-filter:saturate(140%) blur(10px);
+      background:linear-gradient(180deg, rgba(5,5,12,.98),rgba(5,5,12,.78));
+      border-bottom:1px solid rgba(148,163,255,.18);
     }
-    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .brand{display:flex;align-items:center;gap:16px}
-    .brand img{height:34px;width:auto;display:block}
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:16px;
+    }
+    .brand{display:flex;align-items:center;gap:14px}
+    .brand img{height:32px;width:auto;display:block}
 
-    .nav-right{display:flex;gap:16px;align-items:center}
-    .nav-link{font-size:14px;color:#cfd3ff;opacity:.85}
+    .nav-right{display:flex;align-items:center;gap:18px;font-size:14px}
+    .nav-link{color:#d1d5ff;opacity:.85}
     .nav-link:hover{opacity:1}
     .nav-cta{
-      padding:8px 14px;border-radius:999px;
-      background:linear-gradient(120deg,#6e66ff,#4f46e5);
-      border:1px solid rgba(255,255,255,.12);
-      font-size:14px;font-weight:600;color:white;
+      padding:8px 16px;border-radius:999px;
+      background:linear-gradient(130deg,#6e66ff,#4f46e5);
+      border:1px solid rgba(255,255,255,.16);
+      color:#fefefe;font-weight:600;
+      box-shadow:0 8px 22px rgba(79,70,229,.45);
     }
 
+    /* HERO */
+
+    .hero{padding:60px 0 40px}
+    .hero-layout{
+      display:grid;
+      grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);
+      gap:42px;
+      align-items:center;
+    }
     .pill{
       display:inline-flex;gap:8px;align-items:center;
-      border:1px solid #2a2f45;border-radius:999px;
-      padding:6px 12px;color:#cbd5ff;background:rgba(99,91,255,.1);
+      border:1px solid rgba(99,102,241,.55);
+      border-radius:999px;
+      padding:6px 12px;
+      color:#cbd5ff;
+      background:rgba(79,70,229,.14);
       font-size:13px;
     }
-    .hero{padding:64px 0 40px}
     .h1{
       font-size:clamp(30px,4.6vw,56px);
-      line-height:1.05;margin:10px 0 14px;
-      font-weight:800;letter-spacing:-0.02em
+      line-height:1.05;
+      margin:12px 0 16px;
+      font-weight:800;
+      letter-spacing:-0.03em;
     }
     .grad{
       background:linear-gradient(90deg,#b2b7ff 0%,#7de3ff 40%,#b7f8d8 80%);
-      -webkit-background-clip:text;background-clip:text;color:transparent
+      -webkit-background-clip:text;background-clip:text;color:transparent;
     }
     .lead{
-      font-size:clamp(16px,2vw,22px);
-      color:var(--muted);max-width:820px
+      font-size:clamp(16px,2vw,21px);
+      color:var(--muted);
+      max-width:640px;
     }
     .cta{display:flex;flex-wrap:wrap;gap:14px;margin:26px 0}
     .btn{
-      --shadow:0 8px 22px rgba(99,91,255,.25);
+      --shadow:0 8px 22px rgba(99,91,255,.4);
       display:inline-flex;align-items:center;justify-content:center;gap:10px;
       padding:14px 20px;border-radius:14px;
-      border:1px solid #2a2f45;
+      border:1px solid rgba(148,163,255,.24);
       background:linear-gradient(180deg,#6e66ff,#4f46e5);
-      color:white;font-weight:700;
-      box-shadow:var(--shadow);transition:.15s;
-      font-size:15px;
+      color:white;font-weight:700;font-size:15px;
+      box-shadow:var(--shadow);
+      transition:.15s transform,.15s box-shadow;
     }
-    .btn:hover{transform:translateY(-1px)}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(79,70,229,.6)}
     .btn.secondary{
-      background:#131629;color:#dbe0ff;
+      background:#111433;
       box-shadow:none;
+      color:#e5e7ff;
     }
     .btn.ghost{
-      background:transparent;color:#dbe0ff;
+      background:transparent;
       border-style:dashed;
+      box-shadow:none;
+      color:#d1d5ff;
     }
 
     .kpis{
-      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:14px;margin:26px 0
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;margin:22px 0 0;
     }
     .kpi{
-      background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
-      border:1px solid #23263a;padding:18px;border-radius:var(--radius)
+      background:radial-gradient(circle at 0 0,rgba(96,165,250,.21),transparent 60%);
+      border-radius:var(--radius);
+      border:1px solid rgba(148,163,255,.16);
+      padding:16px;
     }
-    .kpi b{font-size:28px}
+    .kpi b{font-size:26px}
 
-    .section{padding:40px 0}
-    .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-    .card{
-      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
-      border:1px solid #23263a;border-radius:var(--radius);padding:20px
+    /* HERO PREVIEW (mockup) */
+
+    .hero-preview{
+      position:relative;
+      padding:18px;
+      border-radius:26px;
+      border:1px solid rgba(148,163,255,.26);
+      background:radial-gradient(circle at 10% 0,#27294d 0,transparent 60%),#050512;
+      box-shadow:0 24px 60px rgba(15,23,42,.85);
     }
-    .card h3{margin:6px 0 8px}
-    .badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .badge{
-      background:#121424;border:1px solid #262a42;
-      border-radius:999px;padding:6px 10px;color:#c9d1ff;font-size:12px
+    .hero-preview-header{
+      display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;
+    }
+    .hero-avatar{
+      display:flex;align-items:center;gap:10px;
+    }
+    .hero-avatar-circle{
+      width:34px;height:34px;border-radius:999px;
+      background:radial-gradient(circle at 30% 0,#f9fafb,#e0f2fe);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;color:#111827;font-size:16px;
+    }
+    .hero-avatar span{font-size:14px;color:#e5e7ff;font-weight:600}
+    .hero-avatar small{display:block;font-size:12px;color:#9ca3ff}
+
+    .hero-pill-mini{
+      border-radius:999px;
+      padding:5px 10px;
+      border:1px solid rgba(148,163,255,.24);
+      font-size:11px;color:#c7d2ff;
+      background:rgba(15,23,42,.9);
     }
 
-    .how{
-      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px
+    .chat-bubbles{
+      border-radius:18px;
+      background:rgba(15,23,42,.85);
+      border:1px solid rgba(55,65,115,.9);
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      font-size:13px;
     }
-    .how .step{
-      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
-      border:1px solid #23263a;border-radius:var(--radius);padding:20px
+    .bubble{
+      max-width:88%;
+      padding:9px 11px;
+      border-radius:14px;
+      line-height:1.35;
     }
-
-    .stripe{margin-top:6px;font-size:14px;color:#9aa3c7}
+    .bubble.bot{
+      background:linear-gradient(140deg,#1e1f3f,#18192f);
+      border:1px solid rgba(129,140,248,.55);
+    }
+    .bubble.user{
+      margin-left:auto;
+      background:#0b1726;
+      border:1px solid rgba(56,189,248,.5);
+    }
+    .bubble strong{color:#e5e7ff}
+    .hero-email{
+      margin-top:12px;
+      border-radius:14px;
+      border:1px dashed rgba(148,163,255,.4);
+      padding:10px 12px;
+      font-size:12px;
+      color:#cbd5ff;
+      background:rgba(15,23,42,.9);
+    }
+    .hero-email code{font-size:11px}
 
     .logos{
       display:flex;gap:22px;flex-wrap:wrap;
-      align-items:center;margin-top:18px
+      align-items:center;margin-top:22px
     }
     .logos img{
-      height:36px;width:auto;
+      height:34px;width:auto;
       filter:none;opacity:1;
     }
+    .logos span{font-size:13px;color:#9ca3c8}
 
-    .faq{
-      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px
+    /* SECTIONS */
+
+    .section{padding:42px 0}
+    .section h2{margin-bottom:10px}
+
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:16px;
     }
-    details{
-      background:#0f1222;border:1px solid #252a42;
-      border-radius:12px;padding:14px
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+      border:1px solid rgba(148,163,255,.18);
+      border-radius:var(--radius);
+      padding:18px 18px 20px;
     }
-    summary{cursor:pointer;font-weight:600}
+    .card h3{margin:6px 0 8px}
+    .stripe{margin-top:6px;font-size:14px;color:#9aa3c7}
+
+    .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .badge{
+      background:#101223;
+      border:1px solid #252a42;
+      border-radius:999px;
+      padding:5px 10px;
+      color:#c9d1ff;
+      font-size:12px;
+    }
+
+    .how{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:18px;
+    }
+    .how .step{
+      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.01));
+      border-radius:var(--radius);
+      border:1px solid rgba(148,163,255,.18);
+      padding:18px;
+    }
+
+    .demo-wrapper{
+      max-width:880px;
+      margin:18px auto 0;
+    }
+    .demo-frame{
+      width:100%;
+      height:360px;           /* plus petite, mais confortable */
+      border:0;
+      display:block;
+    }
+
+    .copy{
+      display:flex;align-items:center;gap:10px;
+      background:#0e1020;
+      border:1px dashed #323552;
+      border-radius:12px;
+      padding:10px 12px;
+      margin-top:12px;
+    }
+    .copy code{
+      white-space:nowrap;overflow:auto;
+      font-size:12px;
+    }
+    .copy button{
+      margin-left:auto;
+      background:#171b35;color:#dfe3ff;
+      border:1px solid #2a2e4a;
+      border-radius:10px;
+      padding:7px 10px;
+      cursor:pointer;
+      font-size:12px;
+    }
 
     .testimonials{
-      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:16px;
     }
     .testi-name{font-weight:600;margin-top:8px}
     .testi-role{font-size:13px;color:#a3acd6}
 
+    .faq{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+    details{
+      background:#0f1222;
+      border:1px solid #252a42;
+      border-radius:12px;
+      padding:12px 14px;
+    }
+    summary{cursor:pointer;font-weight:600}
+
+    /* CONTACT + FOOTER */
+
     footer{
-      padding:40px 0;color:#9aa3c7;
+      padding:34px 0;
+      color:#9aa3c7;
       border-top:1px solid #202437;
-      background:linear-gradient(180deg,rgba(255,255,255,.03),transparent)
-    }
-    .copy{
-      display:flex;align-items:center;gap:10px;
-      background:#0e1020;border:1px dashed #323552;
-      border-radius:12px;padding:12px;margin-top:12px
-    }
-    .copy code{white-space:nowrap;overflow:auto;font-size:12px}
-    .copy button{
-      margin-left:auto;background:#171b35;color:#dfe3ff;
-      border:1px solid #2a2e4a;border-radius:10px;
-      padding:8px 10px;cursor:pointer;font-size:12px
+      background:linear-gradient(180deg,rgba(255,255,255,.03),transparent);
     }
 
     .sr-only{
       position:absolute;width:1px;height:1px;padding:0;margin:-1px;
-      overflow:hidden;clip:rect(0,0,0,0);border:0
+      overflow:hidden;clip:rect(0,0,0,0);border:0;
     }
 
     @media (max-width:980px){
+      .hero{padding-top:46px}
+      .hero-layout{grid-template-columns:1fr;gap:32px}
       .cards,.kpis,.how,.faq,.testimonials{grid-template-columns:1fr}
-      .logos{gap:12px}
-      .hero{padding-top:48px}
       .nav{flex-direction:column;align-items:flex-start}
-      .nav-right{width:100%;justify-content:flex-end}
+      .nav-right{width:100%;justify-content:flex-end;flex-wrap:wrap}
     }
   </style>
 </head>
 
 <body>
-  <!-- Bloc SEO invisible : liste de métiers -->
+  <!-- bloc SEO métiers -->
   <div class="sr-only">
     Bot métier no-code pour garagiste, kinésithérapeute, avocat, médecin généraliste, dentiste, ostéopathe, infirmier libéral, notaire, huissier,
     expert-comptable, architecte, agent immobilier, courtier, assurance, coach sportif, diététicien, restaurateur, hôtelier, traiteur, fleuriste,
@@ -221,6 +372,7 @@
     studio de yoga, salle de sport, association, mairie, cabinet médical, laboratoire d’analyses.
   </div>
 
+  <!-- HEADER -->
   <header>
     <div class="container nav">
       <div class="brand">
@@ -240,112 +392,133 @@
   <main class="container">
     <!-- HERO -->
     <section class="hero">
-      <span class="pill">Sans code • Emails directs • Déploiement en 3 min</span>
-      <h1 class="h1">
-        Le <span class="grad">bot métier</span> qui
-        <u>qualifie +40% de vos leads</u> et vous envoie tout <b>par email</b>.
-      </h1>
-      <p class="lead">
-        Installez Betty sur votre site (avocat, médecin, agent immobilier, école de danse, coach…).  
-        Elle pose les bonnes questions, filtre les curieux et vous livre des contacts <b>exploitables</b> immédiatement dans votre boîte de réception.
-      </p>
-      <div class="cta">
-        <a class="btn" href="https://betty-abonnement-version2.vercel.app/" target="_blank" rel="noopener">Créer mon bot maintenant</a>
-        <a class="btn secondary" href="#betty-live">Essayer la démo</a>
-        <a class="btn ghost" href="#contact">Parler à quelqu’un</a>
-      </div>
-      <div class="kpis">
-        <div class="kpi">
-          <b>+40%</b><br/>
-          <span class="stripe">Taux de qualification moyen visé</span>
-        </div>
-        <div class="kpi">
-          <b>3 minutes</b><br/>
-          <span class="stripe">De l’inscription à l’intégration</span>
-        </div>
-        <div class="kpi">
-          <b>0 ligne de code</b><br/>
-          <span class="stripe">Tout arrive par email chez vous</span>
-        </div>
-      </div>
+      <div class="hero-layout">
+        <div>
+          <span class="pill">Sans code • Emails directs • Déploiement en 3 min</span>
+          <h1 class="h1">
+            Le <span class="grad">bot métier</span> qui
+            <u>qualifie +40% de vos leads</u>
+            et vous envoie tout <b>par email</b>.
+          </h1>
+          <p class="lead">
+            Installez Betty sur votre site (avocat, médecin, agent immobilier, école de danse, coach…).
+            Elle pose les bonnes questions, filtre les curieux et vous livre des contacts <b>exploitables</b>
+            immédiatement dans votre boîte de réception.
+          </p>
+          <div class="cta">
+            <a class="btn" href="https://betty-abonnement-version2.vercel.app/" target="_blank" rel="noopener">Créer mon bot maintenant</a>
+            <a class="btn secondary" href="#betty-live">Voir la démo</a>
+            <a class="btn ghost" href="#contact">Parler à quelqu’un</a>
+          </div>
+          <div class="kpis">
+            <div class="kpi">
+              <b>+40%</b><br/>
+              <span class="stripe">Taux de qualification moyen visé</span>
+            </div>
+            <div class="kpi">
+              <b>3 minutes</b><br/>
+              <span class="stripe">De l’inscription à l’intégration</span>
+            </div>
+            <div class="kpi">
+              <b>0 ligne de code</b><br/>
+              <span class="stripe">Tout arrive par email chez vous</span>
+            </div>
+          </div>
 
-      <div class="logos" aria-label="Conçu pour vos outils">
-        <img src="/gmail_logo.png" alt="Fonctionne avec Gmail"/>
-        <img src="/logo_outlook.png" alt="Fonctionne avec Outlook"/>
-        <img src="/googlsheet_logo.png" alt="Connectable à Google Sheets"/>
-        <img src="/logo_stripe.png" alt="Paiement sécurisé Stripe"/>
+          <div class="logos">
+            <span>Connecté à vos outils :</span>
+            <img src="/gmail_logo.png" alt="Gmail" />
+            <img src="/logo_outlook.png" alt="Outlook" />
+            <img src="/googlsheet_logo.png" alt="Google Sheets" />
+            <img src="/logo_stripe.png" alt="Stripe" />
+          </div>
+        </div>
+
+        <!-- Mockup Betty -->
+        <aside class="hero-preview" aria-label="Aperçu du fonctionnement de Betty">
+          <div class="hero-preview-header">
+            <div class="hero-avatar">
+              <div class="hero-avatar-circle">B</div>
+              <div>
+                <span>Betty</span>
+                <small>Assistante métier IA</small>
+              </div>
+            </div>
+            <div class="hero-pill-mini">Lead en cours de qualification…</div>
+          </div>
+          <div class="chat-bubbles">
+            <div class="bubble bot">
+              Bonjour, je suis <strong>Betty</strong>. Je vous pose quelques questions pour aider <strong>votre avocat</strong> à traiter votre demande.
+            </div>
+            <div class="bubble user">
+              Bonjour, je souhaite acheter un appartement à moins de 300&nbsp;000&nbsp;€ au Mans.
+            </div>
+            <div class="bubble bot">
+              Merci. Pouvez-vous préciser votre <strong>budget maximum</strong> et votre échéance&nbsp;?
+            </div>
+            <div class="bubble user">
+              Budget 280&nbsp;000&nbsp;€, idéalement dans les 6 prochains mois.
+            </div>
+            <div class="bubble bot">
+              Parfait. Dernière question&nbsp;: avez-vous déjà un <strong>accord de principe bancaire</strong>&nbsp;?
+            </div>
+          </div>
+          <div class="hero-email">
+            <strong>Email généré :</strong><br/>
+            <code>Sujet : Nouveau lead qualifié Betty – Immobilier<br/>
+Nom : [Client]<br/>
+Budget : 280k — Délai : 6 mois — Projet : achat appartement au Mans<br/>
+Dossier prêt : Accord de principe bancaire = Oui</code>
+          </div>
+        </aside>
       </div>
     </section>
 
     <!-- DEMO LIVE -->
     <section id="betty-live" class="section">
-      <h2 class="h1" style="font-size:32px">Essayez Betty maintenant</h2>
-      <p class="stripe">Cette démo montre Betty intégrée sur un site réel. La fenêtre est volontairement réduite pour rester discrète sur votre page.</p>
-      <div class="card" style="padding:0; overflow:hidden; max-width:860px; margin:16px auto 0">
+      <h2 class="h1" style="font-size:32px">Voir la démo en conditions réelles</h2>
+      <p class="stripe">
+        Aperçu réduit du widget Betty Danse. Sur votre site, vous choisissez la taille, la position et les couleurs.
+      </p>
+
+      <div class="demo-wrapper card" style="padding:0;overflow:hidden;">
         <iframe
+          class="demo-frame"
           src="https://bettybotdelph.onrender.com/"
           title="Betty Danse (démo réelle)"
-          style="width:100%; height:420px; border:0; display:block"
-          loading="lazy"></iframe>
+          loading="lazy">
+        </iframe>
       </div>
-      <div class="copy" style="max-width:860px;margin:12px auto 0">
-        <code id="embed-live">&lt;script src="https://bettybots.vercel.app/embed.js" data-pack="avocat" data-email="spectramediabots@gmail.com" defer&gt;&lt;/script&gt;</code>
-        <button onclick="navigator.clipboard.writeText(document.getElementById('embed-live').innerText); this.textContent='Copié ✔';">Copier</button>
-      </div>
-      <div class="stripe" style="max-width:860px;margin:8px auto 0">
-        Remplacez <code>data-pack</code> par votre pack ou utilisez <code>data-public-id</code>.  
-        L’adresse de réception par défaut est <code>spectramediabots@gmail.com</code> (modifiable à l’achat).
-      </div>
-    </section>
 
-    <!-- COMMENT CA MARCHE -->
-    <section id="comment-ca-marche" class="section">
-      <h2 class="h1" style="font-size:32px">Comment ça marche</h2>
-      <div class="how">
-        <div class="step">
-          <h3>1. Choisissez votre pack métier</h3>
-          <p>Avatar, ton, questions de qualification et couleurs. Packs prêts pour <b>avocats, médecins, immobilier, danse, coaching</b> (et plus à venir).</p>
-          <div class="badges">
-            <span class="badge">avatar pro</span>
-            <span class="badge">ton adapté</span>
-            <span class="badge">questions ciblées</span>
-          </div>
+      <div class="demo-wrapper">
+        <div class="copy">
+          <code id="embed-live">&lt;script src="https://bettybots.vercel.app/embed.js" data-pack="avocat" data-email="spectramediabots@gmail.com" defer&gt;&lt;/script&gt;</code>
+          <button onclick="navigator.clipboard.writeText(document.getElementById('embed-live').innerText); this.textContent='Copié ✔';">
+            Copier
+          </button>
         </div>
-        <div class="step">
-          <h3>2. Intégrez un simple script</h3>
-          <p>Copiez/collez ce code sur votre site (Wix, WordPress, Webflow, HTML). C’est tout.</p>
-          <div class="copy">
-            <code id="embed">&lt;script src="https://bettybots.vercel.app/embed.js" data-pack="avocat" data-email="spectramediabots@gmail.com" defer&gt;&lt;/script&gt;</code>
-            <button onclick="navigator.clipboard.writeText(document.getElementById('embed').innerText); this.textContent='Copié ✔';">Copier</button>
-          </div>
-        </div>
-        <div class="step">
-          <h3>3. Recevez des emails qualifiés</h3>
-          <p>Chaque conversation envoie un <b>récap clair</b> avec les réponses clés et les coordonnées du prospect — directement dans votre boîte mail.</p>
-          <div class="badges">
-            <span class="badge">récap auto</span>
-            <span class="badge">priorisation</span>
-            <span class="badge">RGPD friendly</span>
-          </div>
+        <div class="stripe">
+          Remplacez <code>data-pack</code> par votre pack ou utilisez <code>data-public-id</code>.  
+          L’adresse de réception par défaut est <code>spectramediabots@gmail.com</code> (modifiable à l’achat).
         </div>
       </div>
     </section>
 
-    <!-- POURQUOI C'EST CANON -->
+    <!-- POURQUOI -->
     <section class="section">
       <h2 class="h1" style="font-size:32px">Pourquoi c’est canon</h2>
       <div class="cards">
         <div class="card">
           <h3>Qualification intelligente</h3>
-          <p>Betty pose des questions adaptées au métier, relance si nécessaire et structure les réponses pour vous faire gagner du temps.</p>
+          <p>Betty pose des questions adaptées au métier, relance si nécessaire et structure les réponses en un récap lisible.</p>
         </div>
         <div class="card">
           <h3>Emails actionnables</h3>
-          <p>Vous recevez des messages lisibles, triés, avec toutes les infos pour rappeler le prospect immédiatement.</p>
+          <p>Vous recevez des messages clairs, prêts à être traités, avec toutes les infos pour rappeler le prospect dans les minutes qui suivent.</p>
         </div>
         <div class="card">
           <h3>Personnalisable</h3>
-          <p>Couleurs, avatar, ton, packs métier. Ajoutez vos propres questions en un clic.</p>
+          <p>Couleurs, avatar, ton, packs métier. Vous pouvez ajouter vos propres questions ou scénarios en un clic.</p>
         </div>
       </div>
     </section>
@@ -353,7 +526,7 @@
     <!-- METIERS -->
     <section id="metiers" class="section">
       <h2 class="h1" style="font-size:32px">Métiers pour lesquels Betty est prête</h2>
-      <p class="stripe">Vous pouvez démarrer en quelques minutes avec un pack pré-configuré, puis ajuster le ton et les questions.</p>
+      <p class="stripe">Packs prêts à l’emploi, ajustables à votre ton et à vos contraintes.</p>
       <div class="cards">
         <div class="card">
           <h3>Immobilier</h3>
@@ -373,10 +546,43 @@
         </div>
         <div class="card">
           <h3>Coaching & bien-être</h3>
-          <p>Coachs, thérapeutes, praticiens : filtrage des demandes, objectifs, budget, disponibilité, langue, format.</p>
+          <p>Coachs, thérapeutes, praticiens : filtrage des demandes, objectifs, budget, disponibilité, format.</p>
           <div class="badges">
             <span class="badge">coaching</span>
             <span class="badge">santé</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMENT CA MARCHE -->
+    <section id="comment-ca-marche" class="section">
+      <h2 class="h1" style="font-size:32px">Comment ça marche</h2>
+      <div class="how">
+        <div class="step">
+          <h3>1. Choisissez votre pack</h3>
+          <p>Avatar, ton, script et couleurs. Vous partez d’un pack métier (immobilier, danse, coaching…) que vous adaptez en quelques clics.</p>
+          <div class="badges">
+            <span class="badge">avatar pro</span>
+            <span class="badge">ton adapté</span>
+            <span class="badge">questions ciblées</span>
+          </div>
+        </div>
+        <div class="step">
+          <h3>2. Intégrez un simple script</h3>
+          <p>Copiez/collez ce code sur votre site (Wix, WordPress, Webflow, HTML). C’est tout.</p>
+          <div class="copy">
+            <code id="embed">&lt;script src="https://bettybots.vercel.app/embed.js" data-pack="avocat" data-email="spectramediabots@gmail.com" defer&gt;&lt;/script&gt;</code>
+            <button onclick="navigator.clipboard.writeText(document.getElementById('embed').innerText); this.textContent='Copié ✔';">Copier</button>
+          </div>
+        </div>
+        <div class="step">
+          <h3>3. Recevez des emails qualifiés</h3>
+          <p>Chaque conversation génère un email structuré avec les infos clés, le contexte et les coordonnées du prospect.</p>
+          <div class="badges">
+            <span class="badge">récap auto</span>
+            <span class="badge">priorisation</span>
+            <span class="badge">RGPD friendly</span>
           </div>
         </div>
       </div>
@@ -403,23 +609,23 @@
       </div>
     </section>
 
-    <!-- AVIS CLIENTS (mockups) -->
+    <!-- AVIS CLIENTS -->
     <section id="avis" class="section">
       <h2 class="h1" style="font-size:32px">Ce que disent les utilisateurs</h2>
-      <p class="stripe">Témoignages fictifs mais réalistes, pour illustrer l’usage du produit.</p>
+      <p class="stripe">Témoignages fictifs mais plausibles, pour montrer ce que Betty apporte.</p>
       <div class="testimonials">
         <div class="card">
-          <p>« On reçoit enfin des demandes avec budget et délai clair. On perd moins de temps au téléphone. »</p>
+          <p>« On reçoit enfin des demandes avec budget, délai et type de bien. On rappelle en priorité les bons dossiers. »</p>
           <div class="testi-name">Julie M.</div>
           <div class="testi-role">Agence immobilière indépendante</div>
         </div>
         <div class="card">
-          <p>« Pour l’école de danse, Betty filtre les infos de base. On répond plus vite aux bons profils. »</p>
+          <p>« Pour l’école de danse, Betty filtre les questions de base. On perd moins de temps au téléphone et on remplit mieux les cours. »</p>
           <div class="testi-name">Karim D.</div>
           <div class="testi-role">Directeur d’école de danse</div>
         </div>
         <div class="card">
-          <p>« J’ai enfin un tri automatique des demandes : type d’accompagnement, budget, objectifs… C’est beaucoup plus fluide. »</p>
+          <p>« En coaching, je reçois un résumé clair : objectifs, budget, disponibilité. Je sais tout de suite si je peux aider. »</p>
           <div class="testi-name">Camille R.</div>
           <div class="testi-role">Coach sport & nutrition</div>
         </div>
@@ -436,15 +642,15 @@
         </details>
         <details>
           <summary>Où arrivent les leads ?</summary>
-          <p>Directement dans votre boîte mail (Gmail, Outlook, etc.). Option feuille Google Sheets possible.</p>
+          <p>Directement dans votre boîte mail (Gmail, Outlook, etc.). Une option Google Sheets est possible.</p>
         </details>
         <details>
           <summary>Puis-je modifier les questions ?</summary>
-          <p>Oui. Vous pouvez partir d’un pack métier et ajouter vos questions en un clic.</p>
+          <p>Oui. Vous pouvez partir d’un pack métier et ajouter vos questions ou vos textes en un clic.</p>
         </details>
         <details>
           <summary>Et la RGPD ?</summary>
-          <p>Les données collectées servent uniquement à la mise en relation. Vous contrôlez le stockage et la suppression. Spectra Media AI peut vous aider à adapter vos mentions.</p>
+          <p>Les données collectées servent uniquement à la mise en relation. Vous contrôlez le stockage et la suppression ; Spectra Media AI peut vous aider à adapter vos mentions.</p>
         </details>
       </div>
     </section>
