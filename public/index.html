@@ -12,10 +12,9 @@
   <meta property="og:image" content="/static/og-betty-bots.jpg" />
   <meta name="theme-color" content="#4F46E5" />
 
-  <!-- SEO keywords (TPE/PME, >30 métiers, requêtes cibles) -->
+  <!-- SEO -->
   <meta name="keywords" content="faire de l'argent avec l'IA, secrétaire pas cher, chatbot intelligent nouvelle génération, flotte Betty Bot, bot efficace, bot métier, bot no-code, leads qualifiés, assistant commercial IA, standard téléphonique web, qualif lead automatique, TPE, PME, garagiste, kinésithérapeute, avocat, médecin généraliste, dentiste, ostéopathe, infirmier libéral, notaire, huissier, expert-comptable, architecte, agent immobilier, courtier, assurance, coach sportif, diététicien, restaurateur, hôtelier, traiteur, fleuriste, coiffeur, barbier, esthéticienne, spa, carrossier, auto-école, plombier, électricien, chauffagiste, peintre, maçon, menuisier, paysagiste, jardinier, pisciniste, déménageur, taxi, VTC, photographe, vidéaste, graphiste, webdesigner, développeur freelance, formateur, école de danse, studio de yoga, salle de sport, association, mairie, cabinet médical, laboratoire d’analyses" />
 
-  <!-- JSON-LD: Product / SoftwareApplication -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -29,7 +28,6 @@
   }
   </script>
 
-  <!-- JSON-LD: WebSite -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -48,19 +46,26 @@
   <style>
     :root{--bg:#0b0b12;--card:#11121a;--muted:#b2b5c5;--text:#e9ebf4;--brand:#635bff;--brand-2:#22d3ee;--radius:18px}
     *{box-sizing:border-box}
-    html,body{margin:0;height:100%;color:var(--text);
-      background:radial-gradient(1200px 600px at 5% 5%, #1a1630 0, rgba(10,10,14,0) 60%),
-                 radial-gradient(1200px 600px at 95% 0%, #102b2d 0, rgba(10,10,14,0) 55%),
-                 var(--bg);
-      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji")}
+    html,body{
+      margin:0;height:100%;
+      color:var(--text);
+      background:radial-gradient(1200px 600px at 5% 5%, #1a1630 0, rgba(10,10,14,0) 60%),radial-gradient(1200px 600px at 95% 0%, #102b2d 0, rgba(10,10,14,0) 55%),var(--bg);
+      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji";
+    }
     a{color:inherit;text-decoration:none}
     .container{max-width:1120px;margin:0 auto;padding:28px}
-    header{position:sticky;top:0;backdrop-filter:saturate(140%) blur(8px);
+
+    header{
+      position:sticky;top:0;z-index:20;
+      backdrop-filter:saturate(140%) blur(8px);
       background:linear-gradient(180deg, rgba(15,15,20,.85), rgba(15,15,20,.60));
-      border-bottom:1px solid #1f2333;z-index:20}
+      border-bottom:1px solid #1f2333;
+    }
     .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .brand{display:flex;align-items:center;gap:14px}
-    .brand img{height:32px;width:auto}
+
+    .brand{display:flex;align-items:center;gap:16px}
+    .brand img{height:34px;width:auto;display:block} /* logos nets, en COULEUR (aucun filtre) */
+
     .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid #2a2f45;border-radius:999px;padding:6px 12px;color:#cbd5ff;background:rgba(99,91,255,.1)}
     .hero{padding:72px 0 40px}
     .h1{font-size:clamp(30px,4.6vw,56px);line-height:1.05;margin:10px 0 14px;font-weight:800;letter-spacing:-0.02em}
@@ -73,17 +78,25 @@
     .kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:26px 0}
     .kpi{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid #23263a;padding:18px;border-radius:var(--radius)}
     .kpi b{font-size:28px}
+
     .section{padding:36px 0}
     .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
     .card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid #23263a;border-radius:var(--radius);padding:20px}
     .card h3{margin:6px 0 8px}
     .badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .badge{background:#121424;border:1px solid #262a42;border-radius:999px;padding:6px 10px;color:#c9d1ff}
+
     .how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
     .how .step{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid #23263a;border-radius:var(--radius);padding:20px}
+
     .stripe{margin-top:6px;font-size:14px;color:#9aa3c7}
-    .logos{display:flex;gap:22px;flex-wrap:wrap;opacity:.9;align-items:center}
-    .logos img{height:36px;width:auto;filter:grayscale(100%);opacity:.95}
+
+    .logos{display:flex;gap:22px;flex-wrap:wrap;align-items:center;margin-top:18px}
+    .logos img{
+      height:36px;width:auto; /* EN COULEUR — AUCUN FILTRE */
+      filter:none;opacity:1;
+    }
+
     .faq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
     details{background:#0f1222;border:1px solid #252a42;border-radius:12px;padding:14px}
     summary{cursor:pointer;font-weight:600}
@@ -97,7 +110,7 @@
 </head>
 
 <body>
-  <!-- Bloc SEO invisible avec requêtes clés et >30 métiers (sans impact visuel) -->
+  <!-- Bloc SEO invisible : requêtes + >30 métiers -->
   <div class="sr-only">
     Comment faire de l’argent avec l’IA, secrétaire pas cher, chatbot intelligent nouvelle génération, flotte Betty Bot, bot efficace pour tout métier :
     garagiste, kinésithérapeute, avocat, médecin généraliste, dentiste, ostéopathe, infirmier libéral, notaire, huissier, expert-comptable, architecte,
@@ -111,7 +124,7 @@
     <div class="container nav">
       <div class="brand">
         <img src="/spectra_media_logo.png" alt="Spectra Media AI" />
-        <span style="opacity:.6">×</span>
+        <!-- croix supprimée -->
         <img src="/logo_betty.png" alt="Betty Bots" />
       </div>
       <nav style="display:flex;gap:16px;align-items:center">
@@ -285,14 +298,14 @@
   </footer>
 
   <script>
-    // Toujours démarrer tout en haut
+    // démarrage en haut
     try { if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; } } catch(e){}
     window.addEventListener('load', function(){ window.scrollTo(0, 0); });
 
     document.getElementById('y').textContent=new Date().getFullYear();
     (function(){
       const f=document.getElementById('contact-form');
-      if(!f) return; 
+      if(!f) return;
       f.addEventListener('submit', function(e){
         const msg=document.getElementById('form-msg');
         if(document.getElementById('company').value!==''){ e.preventDefault(); msg.textContent='Bloqué : suspicion de spam.'; return; }
